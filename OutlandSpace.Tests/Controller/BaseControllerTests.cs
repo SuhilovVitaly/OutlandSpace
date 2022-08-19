@@ -2,7 +2,7 @@
 
 namespace OutlandSpace.Tests
 {
-    public class Tests
+    public class BaseControllerTests
     {
         [SetUp]
         public void Setup()
@@ -10,7 +10,7 @@ namespace OutlandSpace.Tests
         }
 
         [Test]
-        public void Test1()
+        public void GeneralTest()
         {
             Assert.Pass();
         }
