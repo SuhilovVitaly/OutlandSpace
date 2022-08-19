@@ -1,13 +1,18 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using OutlandSpace.Server;
+using OutlandSpace.Universe.Engine;
 
 namespace OutlandSpace.Tests.Server
 {
     public class BaseServerTests
     {
         [Test]
-        public void GeneralTest()
+        public void LocalServerEngineBaseTest()
         {
-            Assert.Pass();
+            IGameServer server = new LocalServer();
+
+            Assert.Throws<NotImplementedException>(() => server.Initialization());
         }
     }
 }
