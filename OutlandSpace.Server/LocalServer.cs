@@ -9,6 +9,7 @@ namespace OutlandSpace.Server
 
         public IGameTurnSnapshot Initialization()
         {
+            // TODO: Init
             throw new NotImplementedException();
         }
     }
