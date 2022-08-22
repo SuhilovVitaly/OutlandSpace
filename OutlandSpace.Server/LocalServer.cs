@@ -8,6 +8,7 @@ namespace OutlandSpace.Server
     {
         public IGameSessionData Initialization()
         {
+            // TODO: Init
             throw new NotImplementedException();
         }
     }
