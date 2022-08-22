@@ -5,6 +5,7 @@ using OutlandSpace.Universe.Engine;
 
 namespace OutlandSpace.Tests.Server
 {
+    [TestFixture]
     public class BaseServerTests
     {
         [Test]

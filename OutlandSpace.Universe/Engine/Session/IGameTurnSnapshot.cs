@@ -3,7 +3,7 @@ using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Universe.Engine.Session
 {
-    public interface IGameSessionData
+    public interface IGameTurnSnapshot
     {
         int Id { get; set; }
 

@@ -6,7 +6,8 @@ namespace OutlandSpace.Server
 {
     public class LocalServer : IGameServer
     {
-        public IGameSessionData Initialization()
+
+        public IGameTurnSnapshot Initialization()
         {
             throw new NotImplementedException();
         }

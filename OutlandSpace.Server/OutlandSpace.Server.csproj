@@ -9,4 +9,12 @@
     <ProjectReference Include="..\OutlandSpace.Universe\OutlandSpace.Universe.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Engine\" />
+    <None Remove="Engine\Session\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\" />
+    <Folder Include="Engine\Session\" />
+  </ItemGroup>
 </Project>

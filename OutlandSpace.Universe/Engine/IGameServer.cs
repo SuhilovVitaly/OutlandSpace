@@ -4,6 +4,6 @@ namespace OutlandSpace.Universe.Engine
 {
     public interface IGameServer
     {
-        IGameSessionData Initialization();
+        IGameTurnSnapshot Initialization();
     }
 }

@@ -17,4 +17,16 @@
     <ProjectReference Include="..\OutlandSpace.Server\OutlandSpace.Server.csproj" />
     <ProjectReference Include="..\OutlandSpace.Universe\OutlandSpace.Universe.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Universe\Engine\" />
+    <None Remove="Universe\Engine\Session\" />
+    <None Remove="Server\Engine\" />
+    <None Remove="Server\Engine\Session\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Universe\Engine\" />
+    <Folder Include="Universe\Engine\Session\" />
+    <Folder Include="Server\Engine\" />
+    <Folder Include="Server\Engine\Session\" />
+  </ItemGroup>
 </Project>
