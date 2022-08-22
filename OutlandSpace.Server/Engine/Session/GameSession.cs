@@ -11,6 +11,7 @@ namespace OutlandSpace.Server.Engine.Session
 
         public GameSession()
         {
+            // TODO: Add logger here
             Status.Pause();
         }
 
