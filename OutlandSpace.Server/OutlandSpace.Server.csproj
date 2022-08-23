@@ -12,9 +12,15 @@
   <ItemGroup>
     <None Remove="Engine\" />
     <None Remove="Engine\Session\" />
+    <None Remove="Engine\Dialog\" />
+    <None Remove="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\" />
     <Folder Include="Engine\Session\" />
+    <Folder Include="Engine\Dialog\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 </Project>

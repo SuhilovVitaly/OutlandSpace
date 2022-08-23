@@ -10,6 +10,7 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,11 +23,16 @@
     <None Remove="Universe\Engine\Session\" />
     <None Remove="Server\Engine\" />
     <None Remove="Server\Engine\Session\" />
+    <None Remove="Server\Dialog\" />
+    <None Remove="Universe\Engine\Dialog\" />
+    <None Remove="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Universe\Engine\" />
     <Folder Include="Universe\Engine\Session\" />
     <Folder Include="Server\Engine\" />
     <Folder Include="Server\Engine\Session\" />
+    <Folder Include="Server\Dialog\" />
+    <Folder Include="Universe\Engine\Dialog\" />
   </ItemGroup>
 </Project>

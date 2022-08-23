@@ -5,4 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Engine\Dialogs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\Dialogs\" />
+  </ItemGroup>
 </Project>
