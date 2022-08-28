@@ -4,9 +4,9 @@ namespace OutlandSpace.Universe.Engine.Dialogs
     [Serializable]
     public class CommonDialog: IDialog
     {
-        public int Id { get; }
+        public Guid Id { get; }
 
-        public CommonDialog(int id)
+        public CommonDialog(Guid id)
         {
             Id = id;
         }

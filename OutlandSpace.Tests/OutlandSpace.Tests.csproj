@@ -26,6 +26,9 @@
     <None Remove="Server\Dialog\" />
     <None Remove="Universe\Engine\Dialog\" />
     <None Remove="Newtonsoft.Json" />
+    <None Remove="Universe\Tools\" />
+    <None Remove="TestsData\" />
+    <None Remove="TestsData\Dialogs\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Universe\Engine\" />
@@ -34,5 +37,16 @@
     <Folder Include="Server\Engine\Session\" />
     <Folder Include="Server\Dialog\" />
     <Folder Include="Universe\Engine\Dialog\" />
+    <Folder Include="Universe\Tools\" />
+    <Folder Include="TestsData\" />
+    <Folder Include="TestsData\Dialogs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TestsData\Dialogs\BaseDialogPack.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestsData\EmptyTextFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

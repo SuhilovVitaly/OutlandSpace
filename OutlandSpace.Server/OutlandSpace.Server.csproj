@@ -14,13 +14,23 @@
     <None Remove="Engine\Session\" />
     <None Remove="Engine\Dialog\" />
     <None Remove="Newtonsoft.Json" />
+    <None Remove="Data\" />
+    <None Remove="Data\Dialogs\" />
+    <None Remove="Data\Dialogs\DialogsPack_001.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\" />
     <Folder Include="Engine\Session\" />
     <Folder Include="Engine\Dialog\" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\Dialogs\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Dialogs\DialogsPack_001.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

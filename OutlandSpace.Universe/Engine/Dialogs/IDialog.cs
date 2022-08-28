@@ -3,6 +3,6 @@ namespace OutlandSpace.Universe.Engine.Dialogs
 {
     public interface IDialog
     {
-        public int Id { get; }
+        public Guid Id { get; }
     }
 }

@@ -11,9 +11,17 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void LocalServerEngineBaseTest()
         {
-            IGameServer server = new LocalServer();
+            IGameServer server = new LocalServer("TestsData");
 
             Assert.Throws<NotImplementedException>(() => server.Initialization());
+        }
+
+        [Test]
+        public void AfterCreateLocalServerDialogShouldBeCorrectCount()
+        {
+            IGameServer server = new LocalServer("TestsData");
+
+            Assert.AreEqual(1, (server as LocalServer).HealthSystemDialogsCount());
         }
     }
 }

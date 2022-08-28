@@ -7,8 +7,10 @@
 
   <ItemGroup>
     <None Remove="Engine\Dialogs\" />
+    <None Remove="Tools\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Dialogs\" />
+    <Folder Include="Tools\" />
   </ItemGroup>
 </Project>

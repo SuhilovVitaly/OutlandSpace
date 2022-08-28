@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using OutlandSpace.Universe.Engine.Dialogs;
 
@@ -6,11 +7,20 @@ namespace OutlandSpace.Server.Engine.Dialog
 {
     public class DialogFactory: IDialogFactory
     {
-        JsonSerializer serializer = new JsonSerializer();
-        
+        //public DialogsStorage Storage { get; private set; }
 
-        public DialogFactory()
-        {
+        private JsonSerializer serializer = new JsonSerializer();
+
+        public DialogsStorage Initialize(string dialogsRootFolder = "Data")
+        {            
+            var dialogs = new List<IDialog>();
+
+            foreach (var fileContent in Universe.Tools.FilesFactory.GetFilesContentFromDirectory(dialogsRootFolder + @"/Dialogs"))
+            {
+                dialogs.Add(GetDialog(fileContent));
+            }
+
+            return new DialogsStorage(dialogs);
         }
 
         public IDialog GetDialog(string body)
