@@ -23,5 +23,23 @@ namespace OutlandSpace.Tests.Server
 
             Assert.AreEqual(1, (server as LocalServer).HealthSystemDialogsCount());
         }
+
+        [Test]
+        public void AfterCreateLocalServerDialogFromGameShouldBeCorrectCount()
+        {
+            IGameServer server = new LocalServer();
+
+            Assert.AreEqual(1, (server as LocalServer).HealthSystemDialogsCount());
+        }
+
+        [Test]
+        public void TurnSingleExecutionShouldBeCorrectCount()
+        {
+            IGameServer server = new LocalServer();
+            var turnResults = server.TurnExecute();
+
+            Assert.AreEqual(null, turnResults);
+        }
+        //TurnExecute
     }
 }

@@ -17,6 +17,7 @@
     <None Remove="Data\" />
     <None Remove="Data\Dialogs\" />
     <None Remove="Data\Dialogs\DialogsPack_001.json" />
+    <None Remove="Engine\Execution\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\" />
@@ -24,6 +25,7 @@
     <Folder Include="Engine\Dialog\" />
     <Folder Include="Data\" />
     <Folder Include="Data\Dialogs\" />
+    <Folder Include="Engine\Execution\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

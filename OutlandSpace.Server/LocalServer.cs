@@ -29,6 +29,13 @@ namespace OutlandSpace.Server
             throw new NotImplementedException();
         }
 
+        public IGameTurnSnapshot TurnExecute(int count = 1)
+        {
+
+            return null;
+        }
+
+
         public IDialog GetDialog(Guid id) => api.GetDialog(id, dialogStorage);
 
         public int HealthSystemDialogsCount() => health.DialogsCount(dialogStorage);

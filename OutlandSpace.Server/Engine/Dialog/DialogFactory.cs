@@ -7,8 +7,6 @@ namespace OutlandSpace.Server.Engine.Dialog
 {
     public class DialogFactory: IDialogFactory
     {
-        //public DialogsStorage Storage { get; private set; }
-
         private JsonSerializer serializer = new JsonSerializer();
 
         public DialogsStorage Initialize(string dialogsRootFolder = "Data")
@@ -17,13 +15,13 @@ namespace OutlandSpace.Server.Engine.Dialog
 
             foreach (var fileContent in Universe.Tools.FilesFactory.GetFilesContentFromDirectory(dialogsRootFolder + @"/Dialogs"))
             {
-                dialogs.Add(GetDialog(fileContent));
+                dialogs.Add(ParseDialog(fileContent));
             }
 
             return new DialogsStorage(dialogs);
         }
 
-        public IDialog GetDialog(string body)
+        public IDialog ParseDialog(string body)
         {
             serializer.Converters.Add(new JavaScriptDateTimeConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
@@ -32,5 +30,7 @@ namespace OutlandSpace.Server.Engine.Dialog
 
             return result;
         }
+
+        
     }
 }

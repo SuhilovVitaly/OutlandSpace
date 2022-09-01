@@ -5,6 +5,6 @@ namespace OutlandSpace.Server.Engine.Dialog
 {
     public interface IDialogFactory
     {
-        IDialog GetDialog(string body);
+        IDialog ParseDialog(string body);
     }
 }
