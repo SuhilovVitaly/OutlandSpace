@@ -6,10 +6,9 @@ namespace OutlandSpace.Server.Engine
 {
     public class Api
     {
-        public IDialog GetDialog(Guid id, DialogsStorage dialogStorage)
+        public IDialog GetDialog(string id, DialogsStorage dialogStorage)
         {
-
-            return null;
+            return dialogStorage.Dialogs.Find((IDialog obj) => obj.Id == id);
         }
     }
 }

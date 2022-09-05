@@ -15,7 +15,8 @@ namespace OutlandSpace.Server.Engine.Dialog
 
             foreach (var fileContent in Universe.Tools.FilesFactory.GetFilesContentFromDirectory(dialogsRootFolder + @"/Dialogs"))
             {
-                dialogs.Add(ParseDialog(fileContent));
+                var jsonDialogs = JsonConvert.DeserializeObject<List<CommonDialog>>(value: fileContent);
+                dialogs.AddRange(jsonDialogs);
             }
 
             return new DialogsStorage(dialogs);

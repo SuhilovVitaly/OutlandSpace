@@ -36,8 +36,15 @@ namespace OutlandSpace.Server
         }
 
 
-        public IDialog GetDialog(Guid id) => api.GetDialog(id, dialogStorage);
+        public IDialog GetDialog(string id) => api.GetDialog(id, dialogStorage);
 
         public int HealthSystemDialogsCount() => health.DialogsCount(dialogStorage);
+
+        public IDialog DialogResponse(string dialogId)
+        {
+            var resumeDialog = api.GetDialog(dialogId, dialogStorage);
+
+            return resumeDialog;
+        }
     }
 }

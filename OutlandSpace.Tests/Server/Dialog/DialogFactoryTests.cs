@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using OutlandSpace.Server;
 using OutlandSpace.Server.Engine.Dialog;
+using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Dialogs;
 
 namespace OutlandSpace.Tests.Server.Dialog
@@ -42,7 +44,7 @@ namespace OutlandSpace.Tests.Server.Dialog
 
             var storage = dialogFactory.Initialize("TestsData");
 
-            Assert.AreEqual(storage.Dialogs.Count, 1);
+            Assert.AreEqual(storage.Dialogs.Count, 3);
             Assert.AreEqual(storage.Dialogs[0].Turn, 1);
         }
 
@@ -62,7 +64,38 @@ namespace OutlandSpace.Tests.Server.Dialog
             var exceptedJsonString = "{\"Id\":\"" + guid.ToString() + "\",\"Turn\":1,\"Action\":\"\",\"Exits\":[{\"Id\":\"2c052641-3a37-451e-a593-198be707efa7\",\"Label\":\"Label 1\",\"NextDialogId\":\"0d35df2c-2018-4a90-8fd7-af3cc0b1f914\"},{\"Id\":\"f022f9f0-ac27-475e-9f1d-fcd3d5b647da\",\"Label\":\"Label 2\",\"NextDialogId\":\"d37a25a8-757d-48a3-8fdc-1951cb0b9589\"}]}";
 
             Assert.AreEqual(jsonDialogManual, exceptedJsonString);
-      }
+        }
+
+        [Test]
+        public void DialogsAfterSerializationShouldBeCorrect()
+        {
+            var guid = Guid.NewGuid();
+
+            var exits = new List<DialogExit>
+            {
+                new DialogExit(exitIdForFirstExit, "Label 1", nextDialogIdForFirstExit),
+                new DialogExit(exitIdForSecondExit, "Label 2", nextDialogIdForSecondExit)
+            };
+            var dialogManual = new CommonDialog(guid.ToString(), 1, string.Empty, exits);
+
+            var guidExit = Guid.NewGuid();
+            var exitsExit = new List<DialogExit>
+            {
+                new DialogExit(exitIdForFirstExit, "Label 1", nextDialogIdForFirstExit)
+            };
+
+            var dialogExit = new CommonDialog(guidExit.ToString(), 1, string.Empty, exitsExit);
+
+            var dialogCollection = new List<IDialog>{dialogManual, dialogExit };
+
+            var jsonDialogsCollection = JsonConvert.SerializeObject(dialogCollection);
+
+            var jsonDialogManual = JsonConvert.SerializeObject(dialogManual);
+
+            var exceptedJsonString = "{\"Id\":\"" + guid.ToString() + "\",\"Turn\":1,\"Action\":\"\",\"Exits\":[{\"Id\":\"2c052641-3a37-451e-a593-198be707efa7\",\"Label\":\"Label 1\",\"NextDialogId\":\"0d35df2c-2018-4a90-8fd7-af3cc0b1f914\"},{\"Id\":\"f022f9f0-ac27-475e-9f1d-fcd3d5b647da\",\"Label\":\"Label 2\",\"NextDialogId\":\"d37a25a8-757d-48a3-8fdc-1951cb0b9589\"}]}";
+
+            Assert.AreEqual(jsonDialogManual, exceptedJsonString);
+        }
 
         [Test]
         public void GetDialogByGuidShouldBeCorrectTest()
@@ -84,5 +117,7 @@ namespace OutlandSpace.Tests.Server.Dialog
             Assert.AreEqual(dialog.Exits[0].NextDialogId, nextDialogIdForFirstExit);
             Assert.AreEqual(dialog.Exits[1].NextDialogId, nextDialogIdForSecondExit);
         }
-    }
+
+
+    }    
 }

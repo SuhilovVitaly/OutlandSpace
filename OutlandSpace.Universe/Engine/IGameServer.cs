@@ -1,4 +1,5 @@
-﻿using OutlandSpace.Universe.Engine.Session;
+﻿using OutlandSpace.Universe.Engine.Dialogs;
+using OutlandSpace.Universe.Engine.Session;
 
 namespace OutlandSpace.Universe.Engine
 {
@@ -7,5 +8,7 @@ namespace OutlandSpace.Universe.Engine
         IGameTurnSnapshot Initialization();
 
         IGameTurnSnapshot TurnExecute(int count = 1);
+
+        IDialog DialogResponse(string dialogId);
     }
 }
