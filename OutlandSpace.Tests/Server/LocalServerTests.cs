@@ -42,7 +42,7 @@ namespace OutlandSpace.Tests.Server
         public void TurnSingleExecutionShouldBeCorrectCount()
         {
             IGameServer server = new LocalServer();
-            var turnResults = server.TurnExecute();
+            var turnResults = server.TurnExecute(null);
 
             Assert.AreEqual(null, turnResults);
         }

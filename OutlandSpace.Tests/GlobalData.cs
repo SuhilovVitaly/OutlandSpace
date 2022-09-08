@@ -5,7 +5,7 @@ namespace OutlandSpace.Tests
 {
     public static class GlobalData
     {
-        public static int DialogsCountInTests { get; set; } = 3;
+        public static int DialogsCountInTests { get; set; } = 5;
 
         public static int DialogsCount { get; set; } = 1;
 

@@ -44,7 +44,7 @@ namespace OutlandSpace.Tests.Server.Dialog
 
             var storage = dialogFactory.Initialize("TestsData");
 
-            Assert.AreEqual(storage.Dialogs.Count, 3);
+            Assert.AreEqual(storage.Dialogs.Count, 5);
             Assert.AreEqual(storage.Dialogs[0].Turn, 1);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using OutlandSpace.Server.Engine.Session;
+using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Tests.Server.Engine.Session

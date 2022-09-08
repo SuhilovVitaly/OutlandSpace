@@ -8,9 +8,13 @@
   <ItemGroup>
     <None Remove="Engine\Dialogs\" />
     <None Remove="Tools\" />
+    <None Remove="log4net" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Dialogs\" />
     <Folder Include="Tools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
 </Project>

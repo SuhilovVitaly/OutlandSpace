@@ -11,6 +11,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,8 @@
     <None Remove="Universe\Tools\" />
     <None Remove="TestsData\" />
     <None Remove="TestsData\Dialogs\" />
+    <None Remove="log4net" />
+    <None Remove="Server\Engine\Execution\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Universe\Engine\" />
@@ -40,6 +43,7 @@
     <Folder Include="Universe\Tools\" />
     <Folder Include="TestsData\" />
     <Folder Include="TestsData\Dialogs\" />
+    <Folder Include="Server\Engine\Execution\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="TestsData\Dialogs\BaseDialogPack.json">

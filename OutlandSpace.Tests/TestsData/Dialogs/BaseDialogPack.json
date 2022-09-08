@@ -31,11 +31,35 @@
   {
     "Id": "d37a25a8-757d-48a3-8fdc-1951cb0b9589",
     "Turn": -1,
-    "Action": "window_close",
+    "Action": "window_dialog_common",
+    "Exits": [
+      {
+        "Id": "z022f9f0-ac27-475e-9f1d-fcd3d5b647da",
+        "Label": "Are you ok?",
+        "NextDialogId": "q022f9f0-ac27-475e-9f1d-fcd3d5b647da"
+      }
+    ]
+  },
+  {
+    "Id": "g37a25a8-757d-48a3-8fdc-1951cb0b9580",
+    "Turn": -1,
+    "Action": "game_end",
     "Exits": [
       {
         "Id": "None",
         "Label": "Ok.",
+        "NextDialogId": ""
+      }
+    ]
+  },
+  {
+    "Id": "q022f9f0-ac27-475e-9f1d-fcd3d5b647da",
+    "Turn": -1,
+    "Action": "window_close",
+    "Exits": [
+      {
+        "Id": "None",
+        "Label": "Good luck.",
         "NextDialogId": ""
       }
     ]

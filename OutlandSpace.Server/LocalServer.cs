@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using OutlandSpace.Server.Engine;
 using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Server.Engine.Session;
@@ -15,6 +16,8 @@ namespace OutlandSpace.Server
         private protected DialogsStorage dialogStorage;
         private protected Health health;
 
+        private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
+
         public LocalServer(string dataFolder = "Data")
         {
             api = new Api();
@@ -29,8 +32,10 @@ namespace OutlandSpace.Server
             throw new NotImplementedException();
         }
 
-        public IGameTurnSnapshot TurnExecute(int count = 1)
+        public IGameTurnSnapshot TurnExecute(IGameSession session, int count = 1)
         {
+            dictionaryLock.EnterWriteLock();
+
 
             return null;
         }

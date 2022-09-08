@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using log4net;
+using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Server.Engine.Session
@@ -7,11 +10,17 @@ namespace OutlandSpace.Server.Engine.Session
     [Serializable]
     public class GameSession: IGameSession
     {
+        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private protected StatusController Status = new StatusController();
+        public List<ICelestialObject> CelestialObjects { get; private set; }
+
+        public int Id { get; set; }
+
+        public int Turn { get; private set; }
 
         public GameSession()
         {
-            // TODO: Add logger here
+            _logger.Info("Start new game session.");
             Status.Pause();
         }
 
@@ -20,27 +29,29 @@ namespace OutlandSpace.Server.Engine.Session
             CelestialObjects = objects;
         }
 
-        public int Id { get; set; }
-
-        public int Turn { get;}
-
-
         public List<ICelestialObject> GetCelestialObjects()
         {
             throw new NotImplementedException();
         }
 
+        public void UpdateTurn(List<ICelestialObject> objects, int turns)
+        {
+            CelestialObjects = objects;
+            Turn += turns;
+        }
+
         #region IStatus implementation
 
         public void Resume() => Status.Resume();
-        public void Pause() => Status.Pause();
+        public void Pause() => Status.Pause();        
+
         public bool IsPause => Status.IsPause;
 
         public bool IsDebug { get; set; } = false;
 
         public string ScenarioName => throw new NotImplementedException();
 
-        public List<ICelestialObject> CelestialObjects { get; }
+        
 
         #endregion
 
