@@ -41,10 +41,10 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void TurnSingleExecutionShouldBeCorrectCount()
         {
-            IGameServer server = new LocalServer();
-            var turnResults = server.TurnExecute(null);
+            IGameServer server = GlobalData.LocalServerWithTestData;
+            var turnResults = server.TurnExecute();
 
-            Assert.AreEqual(null, turnResults);
+            Assert.AreEqual(1, turnResults.Turn);
         }
 
         [Test]

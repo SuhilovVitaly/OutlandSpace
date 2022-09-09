@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Universe.Engine.Session
 {
-    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     public class GameTurnSnapshot : IGameTurnSnapshot
     {
-        public GameTurnSnapshot()
+        public GameTurnSnapshot(ITurnDialogs dialogs, List<ICelestialObject> objects, int id, int turn, bool isPause, bool isDebug)
         {
+            Id = id;
+            Turn = turn;
+            IsPause = isPause;
+            IsDebug = isDebug;
+            celestialObjects = objects;
+            Dialogs = dialogs;
         }
 
         public int Id { get; set; }
-        public bool IsPause { get; set; } = true;
-        public bool IsDebug { get; set; } = false;
+        public int Turn { get; set; }
+        public bool IsPause { get; set; }
+        public bool IsDebug { get; set; }
 
-        public int Turn => throw new NotImplementedException();
+        public ITurnDialogs Dialogs { get; set; }
+
+        private List<ICelestialObject> celestialObjects;
 
         public List<ICelestialObject> GetCelestialObjects()
         {
-            throw new NotImplementedException();
-        }
-
-        private string GetDebuggerDisplay()
-        {
-            return ToString();
+            return celestialObjects;
         }
     }
 }

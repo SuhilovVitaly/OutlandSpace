@@ -2,6 +2,7 @@
 using System.Threading;
 using OutlandSpace.Server.Engine;
 using OutlandSpace.Server.Engine.Dialog;
+using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Dialogs;
@@ -13,7 +14,7 @@ namespace OutlandSpace.Server
     {
         private protected GameSession session;
         private protected Api api;
-        private protected DialogsStorage dialogStorage;
+        private protected DialogsStorage dialogsStorage;
         private protected Health health;
 
         private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
@@ -23,7 +24,7 @@ namespace OutlandSpace.Server
             api = new Api();
             health = new Health();
             session = new GameSession();
-            dialogStorage = new DialogFactory().Initialize(dataFolder);
+            dialogsStorage = new DialogFactory().Initialize(dataFolder);
         }
 
         public IGameTurnSnapshot Initialization()
@@ -36,20 +37,27 @@ namespace OutlandSpace.Server
         {
             dictionaryLock.EnterWriteLock();
 
+            var turnSnapshot = TurnCalculate.Execute(session, dialogsStorage);
 
-            return null;
+            return turnSnapshot;
         }
 
+        public IGameTurnSnapshot TurnExecute(int count = 1)
+        {
+            return TurnExecute(session);
+        }
 
-        public IDialog GetDialog(string id) => api.GetDialog(id, dialogStorage);
+        public IDialog GetDialog(string id) => api.GetDialog(id, dialogsStorage);
 
-        public int HealthSystemDialogsCount() => health.DialogsCount(dialogStorage);
+        public int HealthSystemDialogsCount() => health.DialogsCount(dialogsStorage);
 
         public IDialog DialogResponse(string dialogId)
         {
-            var resumeDialog = api.GetDialog(dialogId, dialogStorage);
+            var resumeDialog = api.GetDialog(dialogId, dialogsStorage);
 
             return resumeDialog;
         }
+
+        
     }
 }

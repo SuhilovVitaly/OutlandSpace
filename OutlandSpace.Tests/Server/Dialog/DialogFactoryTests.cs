@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using OutlandSpace.Server;
 using OutlandSpace.Server.Engine.Dialog;
-using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Dialogs;
 
 namespace OutlandSpace.Tests.Server.Dialog

@@ -19,6 +19,7 @@
     <None Remove="Data\Dialogs\DialogsPack_001.json" />
     <None Remove="Engine\Execution\" />
     <None Remove="log4net" />
+    <None Remove="Engine\Execution\Calculation\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\" />
@@ -27,6 +28,7 @@
     <Folder Include="Data\" />
     <Folder Include="Data\Dialogs\" />
     <Folder Include="Engine\Execution\" />
+    <Folder Include="Engine\Execution\Calculation\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
