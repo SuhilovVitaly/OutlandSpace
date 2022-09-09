@@ -13,7 +13,7 @@ namespace OutlandSpace.Universe.Engine.Dialogs
 
         public string Action { get; }
 
-        public DialogExit(string id, string label, string nextDialogId, string action)
+        public DialogExit(string id, string label, string nextDialogId, string action = "")
         {
             Id = id;
             Label = label;

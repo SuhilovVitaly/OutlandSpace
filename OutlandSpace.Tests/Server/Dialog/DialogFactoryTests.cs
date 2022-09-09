@@ -59,7 +59,7 @@ namespace OutlandSpace.Tests.Server.Dialog
             var dialogManual = new CommonDialog(guid.ToString(), 1, string.Empty, exits);
             var jsonDialogManual = JsonConvert.SerializeObject(dialogManual);
 
-            var exceptedJsonString = "{\"Id\":\"" + guid.ToString() + "\",\"Turn\":1,\"Action\":\"\",\"Exits\":[{\"Id\":\"2c052641-3a37-451e-a593-198be707efa7\",\"Label\":\"Label 1\",\"NextDialogId\":\"0d35df2c-2018-4a90-8fd7-af3cc0b1f914\"},{\"Id\":\"f022f9f0-ac27-475e-9f1d-fcd3d5b647da\",\"Label\":\"Label 2\",\"NextDialogId\":\"d37a25a8-757d-48a3-8fdc-1951cb0b9589\"}]}";
+            var exceptedJsonString = "{\"Id\":\"" + guid.ToString() + "\",\"Turn\":1,\"Action\":\"\",\"Exits\":[{\"Id\":\"2c052641-3a37-451e-a593-198be707efa7\",\"Label\":\"Label 1\",\"NextDialogId\":\"0d35df2c-2018-4a90-8fd7-af3cc0b1f914\",\"Action\":\"\"},{\"Id\":\"f022f9f0-ac27-475e-9f1d-fcd3d5b647da\",\"Label\":\"Label 2\",\"NextDialogId\":\"d37a25a8-757d-48a3-8fdc-1951cb0b9589\",\"Action\":\"\"}]}";
 
             Assert.AreEqual(jsonDialogManual, exceptedJsonString);
         }
@@ -90,7 +90,7 @@ namespace OutlandSpace.Tests.Server.Dialog
 
             var jsonDialogManual = JsonConvert.SerializeObject(dialogManual);
 
-            var exceptedJsonString = "{\"Id\":\"" + guid.ToString() + "\",\"Turn\":1,\"Action\":\"\",\"Exits\":[{\"Id\":\"2c052641-3a37-451e-a593-198be707efa7\",\"Label\":\"Label 1\",\"NextDialogId\":\"0d35df2c-2018-4a90-8fd7-af3cc0b1f914\"},{\"Id\":\"f022f9f0-ac27-475e-9f1d-fcd3d5b647da\",\"Label\":\"Label 2\",\"NextDialogId\":\"d37a25a8-757d-48a3-8fdc-1951cb0b9589\"}]}";
+            var exceptedJsonString = "{\"Id\":\"" + guid.ToString() + "\",\"Turn\":1,\"Action\":\"\",\"Exits\":[{\"Id\":\"2c052641-3a37-451e-a593-198be707efa7\",\"Label\":\"Label 1\",\"NextDialogId\":\"0d35df2c-2018-4a90-8fd7-af3cc0b1f914\",\"Action\":\"\"},{\"Id\":\"f022f9f0-ac27-475e-9f1d-fcd3d5b647da\",\"Label\":\"Label 2\",\"NextDialogId\":\"d37a25a8-757d-48a3-8fdc-1951cb0b9589\",\"Action\":\"\"}]}";
 
             Assert.AreEqual(jsonDialogManual, exceptedJsonString);
         }
