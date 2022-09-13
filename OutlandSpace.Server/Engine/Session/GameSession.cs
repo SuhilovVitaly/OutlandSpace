@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
+using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
@@ -11,8 +12,9 @@ namespace OutlandSpace.Server.Engine.Session
     public class GameSession: IGameSession
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private protected StatusController Status = new StatusController();
+        private protected StatusController Status = new();
         public List<ICelestialObject> CelestialObjects { get; private set; }
+        public ITurnDialogs Dialogs { get; private set; }
 
         public int Id { get; set; }
 
@@ -24,14 +26,22 @@ namespace OutlandSpace.Server.Engine.Session
             Status.Pause();
         }
 
-        public GameSession(List<ICelestialObject> objects): this()
+        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs) : this()
         {
             CelestialObjects = objects;
+            Dialogs = dialogs;
         }
 
         public List<ICelestialObject> GetCelestialObjects()
         {
             throw new NotImplementedException();
+        }
+
+        public void Initialization(string scenarioId)
+        {
+            IScenario scenario = new Scenario(scenarioId);
+
+            CelestialObjects.AddRange(scenario.CelestialObjects);
         }
 
         public void UpdateTurn(List<ICelestialObject> objects, int turns)
@@ -52,6 +62,8 @@ namespace OutlandSpace.Server.Engine.Session
         public string ScenarioName => throw new NotImplementedException();
 
         
+
+
 
         #endregion
 

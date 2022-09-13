@@ -1,0 +1,24 @@
+﻿[
+  {
+    "Id": "c1d39cfc-7876-4cba-9a7a-b385ac0217b9",
+    "Name": "BD-800-349-AO",
+    "Direction": 90.0,
+    "Velocity": 10.0,
+    "Type": 1,
+    "Location": {
+      "X": 200.0,
+      "Y": 100.0
+    }
+  },
+  {
+    "Id": "89dbc992-c09d-4acb-95e5-ab77c2969d27",
+    "Name": "BD-800-349-A1",
+    "Direction": 180.0,
+    "Velocity": 5.0,
+    "Type": 1,
+    "Location": {
+      "X": 300.0,
+      "Y": 150.0
+    }
+  }
+]

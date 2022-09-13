@@ -25,6 +25,8 @@ namespace OutlandSpace.Universe.Tools
 
         async static Task<string[]> GetFilesContentFromDirectoryAsync(string rootFolder, string fileExtention )
         {
+            //"/Users/vitalysushilov/Projects/OutlandSpace/OutlandSpace.Tests/bin/Debug/netcoreapp3.1/TestsData/Scenarios/7045d54c-412b-429e-b1ed-43e62dcc10e6/Dialogs"
+            //"/Users/vitalysushilov/Projects/OutlandSpace/OutlandSpace.Tests/bin/Debug/netcoreapp3.1/TestsData/Scenarios/7045d54c-412b-429e-b1ed-43e62dcc10e6/Dialogs"
             var rootPath = Path.Combine(Environment.CurrentDirectory, rootFolder);
             var allfiles = Directory.GetFiles(rootPath, fileExtention, SearchOption.AllDirectories);
 

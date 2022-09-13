@@ -1,6 +1,9 @@
 ﻿
+using System;
+
 namespace OutlandSpace.Universe.Entities.CelestialObjects
 {
+    [Serializable]
     public enum CelestialObjectTypes
     {
         PointInMap = -1,

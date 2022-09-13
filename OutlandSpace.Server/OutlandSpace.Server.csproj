@@ -21,6 +21,7 @@
     <None Remove="Engine\Execution\" />
     <None Remove="log4net" />
     <None Remove="Engine\Execution\Calculation\" />
+    <None Remove="Data\Scenarios\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\" />
@@ -30,6 +31,7 @@
     <Folder Include="Data\Dialogs\" />
     <Folder Include="Engine\Execution\" />
     <Folder Include="Engine\Execution\Calculation\" />
+    <Folder Include="Data\Scenarios\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -39,5 +41,19 @@
     <Content Include="Data\Dialogs\DialogsPack_001.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Data\Pack_01.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\CelestialObjects.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\CelestialObjects.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\Pack_01.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

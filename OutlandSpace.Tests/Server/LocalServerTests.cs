@@ -19,7 +19,15 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void LocalServerEngineBaseTest()
         {
-            Assert.Throws<NotImplementedException>(() => server.Initialization());
+            var server = GlobalData.LocalServerWithTestData;
+
+            var turnSnapshot = server.Initialization("7045d54c-412b-429e-b1ed-43e62dcc10e6");
+            var celestialObjects = turnSnapshot.GetCelestialObjects();
+
+            Assert.AreEqual(0, turnSnapshot.Turn);
+            Assert.AreEqual(2, turnSnapshot.GetCelestialObjects().Count);
+            Assert.AreEqual("c1d39cfc-7876-4cba-9a7a-b385ac0217b9", celestialObjects[0].Id);
+            Assert.AreEqual("89dbc992-c09d-4acb-95e5-ab77c2969d27", celestialObjects[1].Id);
         }
 
         [Test]

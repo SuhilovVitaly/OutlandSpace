@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Universe.Engine.Session
@@ -11,7 +12,7 @@ namespace OutlandSpace.Universe.Engine.Session
         bool IsDebug { get; set; }
         string ScenarioName { get; }
         List<ICelestialObject> CelestialObjects { get; }
-
+        ITurnDialogs Dialogs { get; }
         void UpdateTurn(List<ICelestialObject> objects, int turns);
     }
 }

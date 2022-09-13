@@ -5,7 +5,9 @@ namespace OutlandSpace.Universe.Engine
 {
     public interface IGameServer
     {
-        IGameTurnSnapshot Initialization();
+        IGameTurnSnapshot Initialization(string scenarioId);
+
+        IGameTurnSnapshot GetSnapshot();
 
         IGameTurnSnapshot TurnExecute(IGameSession session, int count = 1);
 

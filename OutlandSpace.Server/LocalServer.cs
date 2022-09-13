@@ -27,10 +27,19 @@ namespace OutlandSpace.Server
             dialogsStorage = new DialogFactory().Initialize(dataFolder);
         }
 
-        public IGameTurnSnapshot Initialization()
+        public IGameTurnSnapshot Initialization(string scenarioId)
         {
-            // TODO: Init
-            throw new NotImplementedException();
+            dictionaryLock.EnterWriteLock();
+
+            IScenario scenario = new Scenario(scenarioId, "TestsData");
+
+            session = new GameSession(scenario.CelestialObjects, scenario.Dialogs);
+
+            var turnSnapshot = TurnCalculate.Initialization(session, dialogsStorage);
+
+            dictionaryLock.ExitWriteLock();
+
+            return turnSnapshot;
         }
 
         public IGameTurnSnapshot TurnExecute(IGameSession session, int count = 1)
@@ -38,6 +47,8 @@ namespace OutlandSpace.Server
             dictionaryLock.EnterWriteLock();
 
             var turnSnapshot = TurnCalculate.Execute(session, dialogsStorage);
+
+            dictionaryLock.ExitWriteLock();
 
             return turnSnapshot;
         }
@@ -58,6 +69,11 @@ namespace OutlandSpace.Server
             return resumeDialog;
         }
 
-        
+        public IGameTurnSnapshot GetSnapshot()
+        {
+            var result = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects, session.Id, session.Turn, session.IsPause, session.IsDebug);
+
+            return result;
+        }
     }
 }
