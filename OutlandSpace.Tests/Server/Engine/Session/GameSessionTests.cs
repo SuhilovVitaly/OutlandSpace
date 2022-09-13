@@ -16,7 +16,7 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         public void SetUp()
         {
             gameSession = new GameSession();
-            gameSessionWithCelestialObjects = new GameSession(new List<ICelestialObject>());
+            gameSessionWithCelestialObjects = new GameSession(new List<ICelestialObject>(), null);
         }
 
         [Test]

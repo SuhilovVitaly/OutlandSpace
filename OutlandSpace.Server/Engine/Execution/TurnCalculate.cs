@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using log4net;
 using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine.Session;
-using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Server.Engine.Execution
 {
@@ -14,7 +12,7 @@ namespace OutlandSpace.Server.Engine.Execution
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static IGameTurnSnapshot Execute(IGameSession session, DialogsStorage dialogsStorage)
+        public static GameSession Execute(IGameSession session, DialogsStorage dialogsStorage)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -22,28 +20,24 @@ namespace OutlandSpace.Server.Engine.Execution
             var objects = RecalculateCelestialObjectsLocations.Execute(session);
             var turn = TurnPropertiesCalculation.Execute(session);
 
-            var result = new GameTurnSnapshot(turnDialogs, objects, session.Id, turn, session.IsPause, session.IsDebug);
+            var sessionRebuilded = new GameSession(objects, turnDialogs, turn);
 
-            _logger.Debug($"Turn {result.Turn}. Calculation finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
+            _logger.Debug($"Turn {sessionRebuilded.Turn}. Calculation finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
 
-            return result;
+            return sessionRebuilded;
         }
 
-        public static IGameTurnSnapshot Initialization(List<ICelestialObject> celestialObjects, DialogsStorage dialogsStorage)
+        public static GameSession Initialization(IScenario scenario, DialogsStorage dialogsStorage)
         {
             var stopwatch = Stopwatch.StartNew();            
 
             var turnDialogs = DialogsCalculation.Execute(dialogsStorage, 0);
 
-            var session = new GameSession(celestialObjects, turnDialogs);
+            var session = new GameSession(scenario.CelestialObjects, turnDialogs);
 
-            var objects = celestialObjects;
+            _logger.Debug($"Turn {session.Turn}. Initialization finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
 
-            var result = new GameTurnSnapshot(turnDialogs, objects, session.Id, 0, session.IsPause, session.IsDebug);
-
-            _logger.Debug($"Turn {result.Turn}. Initialization finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
-
-            return result;
+            return session;
         }
     }
 }

@@ -33,24 +33,33 @@ namespace OutlandSpace.Server
 
             IScenario scenario = new Scenario(scenarioId, "TestsData");
 
-            session = new GameSession(scenario.CelestialObjects, scenario.Dialogs);
-
-            var turnSnapshot = TurnCalculate.Initialization(session, dialogsStorage);
+            session = TurnCalculate.Initialization(scenario, dialogsStorage);
 
             dictionaryLock.ExitWriteLock();
 
-            return turnSnapshot;
+            return ConvertGameSessionToGameTurnSnapshot(session);
         }
 
         public IGameTurnSnapshot TurnExecute(IGameSession session, int count = 1)
         {
             dictionaryLock.EnterWriteLock();
 
-            var turnSnapshot = TurnCalculate.Execute(session, dialogsStorage);
+            session = TurnCalculate.Execute(session, dialogsStorage);
 
             dictionaryLock.ExitWriteLock();
 
-            return turnSnapshot;
+            return ConvertGameSessionToGameTurnSnapshot(session);
+        }
+
+        private IGameTurnSnapshot ConvertGameSessionToGameTurnSnapshot(IGameSession session)
+        {
+            return new GameTurnSnapshot(
+                session.Dialogs, 
+                session.CelestialObjects, 
+                session.Id, 
+                session.Turn, 
+                session.IsPause, 
+                session.IsDebug);
         }
 
         public IGameTurnSnapshot TurnExecute(int count = 1)

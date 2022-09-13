@@ -26,15 +26,16 @@ namespace OutlandSpace.Server.Engine.Session
             Status.Pause();
         }
 
-        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs) : this()
+        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs, int turn = 0) : this()
         {
             CelestialObjects = objects;
             Dialogs = dialogs;
+            Turn = turn;
         }
 
         public List<ICelestialObject> GetCelestialObjects()
         {
-            throw new NotImplementedException();
+            return CelestialObjects;
         }
 
         public void Initialization(string scenarioId)
