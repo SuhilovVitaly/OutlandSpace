@@ -1,0 +1,26 @@
+﻿[
+  {
+    "Id": "x90adc8a-eca5-4c84-b4a1-682098bb4829",
+    "Turn": 0,
+    "Action": "window_dialog_common",
+    "Exits": [
+      {
+        "Id": "2c052641-3a37-451e-a593-198be707efa7",
+        "Label": "Label 1",
+        "NextDialogId": "xd35df2c-2018-4a90-8fd7-af3cc0b1f914"
+      }
+    ]
+  },
+  {
+    "Id": "xd35df2c-2018-4a90-8fd7-af3cc0b1f914",
+    "Turn": -1,
+    "Action": "window_close",
+    "Exits": [
+      {
+        "Id": "None",
+        "Label": "Welcome to Outland Area.",
+        "NextDialogId": ""
+      }
+    ]
+  }
+]

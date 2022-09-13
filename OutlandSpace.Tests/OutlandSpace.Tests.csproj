@@ -10,11 +10,60 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="log4net" Version="2.0.15" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OutlandSpace.Controller\OutlandSpace.Controller.csproj" />
     <ProjectReference Include="..\OutlandSpace.Server\OutlandSpace.Server.csproj" />
     <ProjectReference Include="..\OutlandSpace.Universe\OutlandSpace.Universe.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Universe\Engine\" />
+    <None Remove="Universe\Engine\Session\" />
+    <None Remove="Server\Engine\" />
+    <None Remove="Server\Engine\Session\" />
+    <None Remove="Server\Dialog\" />
+    <None Remove="Universe\Engine\Dialog\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Universe\Tools\" />
+    <None Remove="TestsData\" />
+    <None Remove="TestsData\Dialogs\" />
+    <None Remove="log4net" />
+    <None Remove="Server\Engine\Execution\" />
+    <None Remove="TestsData\Scenarios\" />
+    <None Remove="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\" />
+    <None Remove="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\" />
+    <None Remove="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\ScenarioDialogsPack_01.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Universe\Engine\" />
+    <Folder Include="Universe\Engine\Session\" />
+    <Folder Include="Server\Engine\" />
+    <Folder Include="Server\Engine\Session\" />
+    <Folder Include="Server\Dialog\" />
+    <Folder Include="Universe\Engine\Dialog\" />
+    <Folder Include="Universe\Tools\" />
+    <Folder Include="TestsData\" />
+    <Folder Include="TestsData\Dialogs\" />
+    <Folder Include="Server\Engine\Execution\" />
+    <Folder Include="TestsData\Scenarios\" />
+    <Folder Include="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\" />
+    <Folder Include="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TestsData\Dialogs\BaseDialogPack.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestsData\EmptyTextFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\CelestialObjects.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\Pack_01.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

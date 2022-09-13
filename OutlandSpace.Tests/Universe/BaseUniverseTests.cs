@@ -2,6 +2,7 @@
 
 namespace OutlandSpace.Tests.Universe
 {
+    [TestFixture]
     public class BaseUniverseTests
     {
         [Test]
