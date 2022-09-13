@@ -29,5 +29,17 @@ namespace OutlandSpace.Tests.Server.Engine.Session
 
             Assert.AreEqual(gameSessionWithCelestialObjects.CelestialObjects.Count, 0);
         }
+
+        [Test]
+        public void InitializationShouldCreateCorrectTurnSnapshotCorrectForTestData()
+        {
+            var expectedCelestialObjects = 2;
+
+            var snapshot = GlobalData.LocalServerWithTestData.Initialization(GlobalData.MainScenarioId);
+
+            Assert.AreEqual(expectedCelestialObjects, snapshot.GetCelestialObjects().Count);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Dialogs.RootDialog.Id);
+
+        }
     }
 }

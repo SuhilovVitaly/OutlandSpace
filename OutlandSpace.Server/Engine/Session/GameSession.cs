@@ -38,13 +38,6 @@ namespace OutlandSpace.Server.Engine.Session
             return CelestialObjects;
         }
 
-        public void Initialization(string scenarioId)
-        {
-            IScenario scenario = new Scenario(scenarioId);
-
-            CelestialObjects.AddRange(scenario.CelestialObjects);
-        }
-
         public void UpdateTurn(List<ICelestialObject> objects, int turns)
         {
             CelestialObjects = objects;

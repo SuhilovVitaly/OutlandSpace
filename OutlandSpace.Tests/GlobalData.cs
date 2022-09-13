@@ -10,6 +10,8 @@ namespace OutlandSpace.Tests
 
         public static int DialogsCount { get; set; } = 1;
 
+        public static string MainScenarioId { get; } = "7045d54c-412b-429e-b1ed-43e62dcc10e6";
+
         private static Lazy<LocalServer> _localServer = new Lazy<LocalServer>(() => new LocalServer("TestsData"));
 
         private static DialogsStorage storage = new DialogFactory().Initialize("TestsData");

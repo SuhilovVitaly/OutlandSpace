@@ -29,7 +29,9 @@ namespace OutlandSpace.Server.Engine.Execution
 
         public static GameSession Initialization(IScenario scenario, DialogsStorage dialogsStorage)
         {
-            var stopwatch = Stopwatch.StartNew();            
+            var stopwatch = Stopwatch.StartNew();
+
+            dialogsStorage.Dialogs.AddRange(scenario.Dialogs);
 
             var turnDialogs = DialogsCalculation.Execute(dialogsStorage, 0);
 
