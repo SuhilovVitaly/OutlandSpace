@@ -9,7 +9,7 @@ namespace OutlandSpace.Controller
     public class Worker : IGameEvents
     {
         private readonly IGameServer _gameServer;
-        private IGameTurnSnapshot _session;
+        private IGameTurnSnapshot _turnSnapshot;
 
         public event Action<IGameTurnSnapshot> OnStartGame;
         public event Action<IGameTurnSnapshot> OnEndTurn;
@@ -18,14 +18,28 @@ namespace OutlandSpace.Controller
         public event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
         public event Action<IGameTurnSnapshot, int> OnEndTurnStep;
 
+        public struct Status
+        {
+            public bool IsRunning { get; set; } 
+        }
+
+        public Status WorkerStatus { get; private set; }
+
         public Worker()
         {
             _gameServer = new LocalServer();
+
+            WorkerStatus = new Status();
+        }
+
+        public IGameTurnSnapshot GetSnapshot()
+        {
+            return _turnSnapshot;
         }
 
         public bool IsRunning()
         {
-            return _session != null;
+            return _turnSnapshot != null;
         }
 
         public void SessionResume()
@@ -40,18 +54,9 @@ namespace OutlandSpace.Controller
             //Logger.Info($"Game paused. Turn is {_session.Turn}");
         }
 
-        public void StartNewGameSession(int ticks = 25)
+        public void StartNewGameSession(string scenarioId, int ticks = 25)
         {
-            //IGameSessionData session = new SessionDataDto
-            //{
-            //    Id = 100,
-            //    IsDebug = true,
-            //    IsPause = true,
-            //    Turn = 0,
-            //    CelestialObjects = new System.Collections.Generic.List<Universe.CelestialObjects.ICelestialObject>()
-            //};
-
-            //_session = _gameServer.SessionInitialization(session);
+            _turnSnapshot = _gameServer.Initialization(scenarioId);
 
             //OnStartGame?.Invoke(_session);
 
@@ -74,11 +79,11 @@ namespace OutlandSpace.Controller
 
             _inProgress = true;
 
-            if (_session == null) throw new NullReferenceException();
+            if (_turnSnapshot == null) throw new NullReferenceException();
 
             var timeMetricGetGameSession = Stopwatch.StartNew();
 
-            //var gameSession = _gameServer.RefreshGameSession(_session.Id);
+            var gameSession = _gameServer.GetSnapshot();
 
             timeMetricGetGameSession.Stop();
 
