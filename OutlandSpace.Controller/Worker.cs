@@ -3,6 +3,7 @@ using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Session;
 using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace OutlandSpace.Controller
 {
@@ -10,6 +11,8 @@ namespace OutlandSpace.Controller
     {
         private readonly IGameServer _gameServer;
         private IGameTurnSnapshot _turnSnapshot;
+        private long _refreshCounter;
+        private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
 
         public event Action<IGameTurnSnapshot> OnStartGame;
         public event Action<IGameTurnSnapshot> OnEndTurn;
@@ -18,18 +21,11 @@ namespace OutlandSpace.Controller
         public event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
         public event Action<IGameTurnSnapshot, int> OnEndTurnStep;
 
-        public struct Status
-        {
-            public bool IsRunning { get; set; } 
-        }
-
-        public Status WorkerStatus { get; private set; }
+        public bool _isRunning { get; private set; }
 
         public Worker()
         {
             _gameServer = new LocalServer();
-
-            WorkerStatus = new Status();
         }
 
         public IGameTurnSnapshot GetSnapshot()
@@ -39,7 +35,7 @@ namespace OutlandSpace.Controller
 
         public bool IsRunning()
         {
-            return _turnSnapshot != null;
+            return _isRunning;
         }
 
         public void SessionResume()
@@ -71,13 +67,12 @@ namespace OutlandSpace.Controller
 
         }
 
-        private bool _inProgress;
 
         public void GetDataFromServer()
         {
-            if (_inProgress) return;
+            dictionaryLock.EnterWriteLock();
 
-            _inProgress = true;
+            _refreshCounter++;
 
             if (_turnSnapshot == null) throw new NullReferenceException();
 
@@ -87,7 +82,12 @@ namespace OutlandSpace.Controller
 
             timeMetricGetGameSession.Stop();
 
-            _inProgress = false;
+            dictionaryLock.ExitWriteLock();
+        }
+
+        public long GetRefreshCounter()
+        {
+            return _refreshCounter;
         }
     }
 }

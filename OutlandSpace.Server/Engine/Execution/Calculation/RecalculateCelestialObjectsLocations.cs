@@ -17,7 +17,7 @@ namespace OutlandSpace.Server.Engine.Execution.Calculation
 
             _logger.Debug($"Turn {session.Turn}. [RecalculateCelestialObjectsLocations] finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
 
-            return null;
+            return session.CelestialObjects;
         }
     }
 }
