@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using NUnit.Framework;
 using OutlandSpace.Server;
 using OutlandSpace.Universe.Engine;
@@ -77,6 +77,58 @@ namespace OutlandSpace.Tests.Server
             var exitDialog = server.DialogResponse(resumeDialog.Exits[0].NextDialogId);
 
             Assert.AreEqual("0d35df2c-2018-4a90-8fd7-af3cc0b1f914", exitDialog.Id);
+        }
+
+        
+
+        [Test]
+        public void PausedGameSessionOnServerShouldBeComputeTicks()
+        {
+            IGameServer server = GlobalData.LocalServerWithTestData;
+
+            server.Initialization(GlobalData.MainScenarioId);
+
+            Thread.Sleep(1000);
+
+            var serverTickFirstCheck = server.GetServerTick();
+
+            Assert.IsTrue(serverTickFirstCheck > 0);
+
+            Thread.Sleep(1000);
+
+            var serverTickSecondCheck = server.GetServerTick();
+
+            Assert.IsTrue(serverTickSecondCheck > serverTickFirstCheck);
+        }
+
+        [Test]
+        public void ResumedGameSessionOnServerShouldBeComputeTicks()
+        {
+            IGameServer server = GlobalData.LocalServerWithTestData;
+
+            server.Initialization(GlobalData.MainScenarioId);
+
+            Thread.Sleep(1000);
+
+            var pausedTicks = server.GetServerTick();
+
+            Assert.IsTrue(pausedTicks > 0);
+
+            server.ResumeSession();
+
+            Thread.Sleep(5000);            
+
+            var serverTickSecondCheck = server.GetServerTick();
+
+            Assert.IsTrue(serverTickSecondCheck > pausedTicks);
+
+            var snapshot = server.GetSnapshot();
+
+            var currentTurn = snapshot.Turn;
+
+            var a = (server as LocalServer).GetServerTurnExecutionCount();
+
+            Assert.IsTrue(currentTurn > 0);
         }
     }
 }
