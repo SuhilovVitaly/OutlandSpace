@@ -12,6 +12,7 @@ namespace OutlandSpace.Universe.Engine.Session
         bool IsDebug { get; set; }
         string ScenarioName { get; }
         List<ICelestialObject> CelestialObjects { get; }
+        IGameTurnSnapshot ToGameTurnSnapshot();
         ITurnDialogs Dialogs { get; }
         void UpdateTurn(List<ICelestialObject> objects, int turns);
     }

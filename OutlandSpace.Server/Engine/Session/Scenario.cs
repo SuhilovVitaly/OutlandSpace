@@ -31,6 +31,18 @@ namespace OutlandSpace.Server.Engine.Session
             Initialization();
         }
 
+        public Scenario(string id, DialogsStorage dialogsStorage, string scenarioRootFolder = "Data")
+        {
+            Id = id;
+
+            ScenarioRootFolder = scenarioRootFolder;
+
+            Initialization();
+
+            Dialogs.AddRange(dialogsStorage.Dialogs);
+        }
+       
+
         private void Initialization()
         {
             CelestialObjects = LoadCelestialObjects(Id);
