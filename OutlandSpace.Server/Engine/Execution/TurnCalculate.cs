@@ -10,7 +10,7 @@ namespace OutlandSpace.Server.Engine.Execution
 {
     public class TurnCalculate
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public static GameSession Execute(IGameSession session, DialogsStorage dialogsStorage)
         {
@@ -22,24 +22,9 @@ namespace OutlandSpace.Server.Engine.Execution
 
             var sessionRebuilded = new GameSession(objects, turnDialogs, turn);
 
-            _logger.Debug($"Turn {sessionRebuilded.Turn}. Calculation finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
+            Logger.Debug($"Turn {sessionRebuilded.Turn}. Calculation finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
 
             return sessionRebuilded;
-        }
-
-        public static GameSession Initialization(IScenario scenario, DialogsStorage dialogsStorage)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            dialogsStorage.Dialogs.AddRange(scenario.Dialogs);
-
-            var turnDialogs = DialogsCalculation.Execute(dialogsStorage, 0);
-
-            var session = new GameSession(scenario.CelestialObjects, turnDialogs);
-
-            _logger.Debug($"Turn {session.Turn}. Initialization finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
-
-            return session;
         }
     }
 }

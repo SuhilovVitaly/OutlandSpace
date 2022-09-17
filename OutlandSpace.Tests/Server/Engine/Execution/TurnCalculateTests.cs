@@ -10,7 +10,7 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
         [Test]
         public void AfterExecuteTurnNumberShouldBeTurnPlusOne()
         {
-            var turnExecuteSnapshot = TurnCalculate.Execute(new GameSession(), GlobalData.DialogsStorageWithTestData);
+            var turnExecuteSnapshot = TurnCalculate.Execute(new GameSession(null, null), GlobalData.DialogsStorageWithTestData);
 
             Assert.That(turnExecuteSnapshot.Turn == 1);
         }
@@ -18,7 +18,7 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
         [Test]
         public void AfterExecuteTwoTurnsNumberShouldBeTurnPlusTwo()
         {
-            var session = new GameSession();
+            var session = new GameSession(null, null);
 
             var firstTurnExecuteSnapshot = TurnCalculate.Execute(session, GlobalData.DialogsStorageWithTestData);
 
@@ -38,7 +38,7 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
         [Test]
         public void AfterExecuteHundredTurnsNumberShouldBeTurnPlusHundred()
         {
-            var session = new GameSession();
+            var session = new GameSession(null, null);
 
             for(int i = 0; i< 1000; i++)
             {

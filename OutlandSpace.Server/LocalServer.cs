@@ -27,13 +27,12 @@ namespace OutlandSpace.Server
         private long _serverTurnCounter;
 
         private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
-        private readonly ReaderWriterLockSlim tickTurnExecuteLock = new ReaderWriterLockSlim();
 
         public LocalServer(string dataFolder = "Data")
         {
             api = new Api();
             health = new Health();
-            session = new GameSession();
+
             dialogsStorage = new DialogFactory().Initialize(dataFolder);
         }
 
@@ -41,13 +40,15 @@ namespace OutlandSpace.Server
         {
             dictionaryLock.EnterWriteLock();
 
-            IScenario scenario = new Scenario(scenarioId, source);
+            IScenario scenario = new Scenario(scenarioId, dialogsStorage, source);
 
-            session = TurnCalculate.Initialization(scenario, dialogsStorage);
+            //session = TurnCalculate.Initialization(scenario, dialogsStorage);
+
+            session = new GameSession(scenario);
 
             dictionaryLock.ExitWriteLock();
 
-            var turnSnapshot = ConvertGameSessionToGameTurnSnapshot(session);
+            var turnSnapshot = session.ToGameTurnSnapshot();
 
             Scheduler.Instance.ScheduleTask(50, 50, ExecuteTurnCalculation, null);
 

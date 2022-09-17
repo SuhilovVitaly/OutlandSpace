@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
+using OutlandSpace.Server.Engine.Dialog;
+using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
@@ -13,6 +15,7 @@ namespace OutlandSpace.Server.Engine.Session
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private protected StatusController Status = new();
+        private protected DialogsStorage Storage;
         public List<ICelestialObject> CelestialObjects { get; private set; }
         public ITurnDialogs Dialogs { get; private set; }
 
@@ -20,17 +23,42 @@ namespace OutlandSpace.Server.Engine.Session
 
         public int Turn { get; private set; }
 
-        public GameSession()
+        public IGameTurnSnapshot ToGameTurnSnapshot()
         {
-            _logger.Info("Start new game session.");
-            Status.Pause();
+            return new GameTurnSnapshot(
+                Dialogs,
+                CelestialObjects,
+                Id,
+                Turn,
+                IsPause,
+                IsDebug);
         }
 
-        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs, int turn = 0) : this()
+        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs, int turn = 0) 
         {
+            Turn = turn;
+
+            Initialization(objects, dialogs, null);
+        }
+
+        public GameSession(IScenario scenario) : this(scenario.CelestialObjects, null)
+        {
+            var storage = new DialogsStorage(scenario.Dialogs);
+
+            var turnDialogs = DialogsCalculation.Execute(storage, 0);
+
+            Initialization(scenario.CelestialObjects, turnDialogs, storage);
+        }
+
+        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, DialogsStorage storage)
+        {
+            _logger.Info("Start new game session.");
+
             CelestialObjects = objects;
             Dialogs = dialogs;
-            Turn = turn;
+            Storage = storage;
+
+            Status.Pause();
         }
 
         public List<ICelestialObject> GetCelestialObjects()
@@ -54,10 +82,6 @@ namespace OutlandSpace.Server.Engine.Session
         public bool IsDebug { get; set; } = false;
 
         public string ScenarioName => throw new NotImplementedException();
-
-        
-
-
 
         #endregion
 

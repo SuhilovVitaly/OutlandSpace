@@ -24,8 +24,6 @@
     <None Remove="Data\Scenarios\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\" />
-    <Folder Include="Engine\Session\" />
     <Folder Include="Engine\Dialog\" />
     <Folder Include="Data\" />
     <Folder Include="Data\Dialogs\" />
