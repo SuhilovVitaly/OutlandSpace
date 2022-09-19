@@ -19,5 +19,14 @@ namespace OutlandSpace.Server.Engine.Execution.Calculation
 
             return session.CelestialObjects;
         }
+
+        public static List<ICelestialObject> Execute(List<ICelestialObject> objects, int turn)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            _logger.Debug($"Turn {turn}. [RecalculateCelestialObjectsLocations] finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
+
+            return objects;
+        }
     }
 }

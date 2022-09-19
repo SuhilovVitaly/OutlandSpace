@@ -23,12 +23,24 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         }
 
         [Test]
+        public void TurnExecutionShouldBeCorrectForBaseSession()
+        {
+            var result = gameSession.TurnExecute();
+
+            Assert.AreEqual(1, result.Dialogs.Dialogs.Count);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", result.Dialogs.RootDialog.Id);
+            Assert.AreEqual(2, result.GetCelestialObjects().Count);
+            Assert.AreEqual(1, result.Turn);
+            Assert.AreEqual(true, result.IsPause);
+        }
+
+        [Test]
         public void GameSessionBaseTest()
         {
 
             Assert.IsTrue(gameSession.Turn == 0);
             Assert.IsTrue(gameSession.IsDebug == false);
-            Assert.IsTrue(gameSession.IsPause == true);
+            Assert.IsTrue(gameSession.IsPause);
 
             Assert.AreEqual(gameSession.CelestialObjects.Count, 2);
         }
