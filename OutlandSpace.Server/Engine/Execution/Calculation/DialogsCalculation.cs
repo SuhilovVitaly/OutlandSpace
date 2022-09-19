@@ -14,7 +14,7 @@ namespace OutlandSpace.Server.Engine.Execution.Calculation
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static ITurnDialogs Execute(IGameSession session, DialogsStorage dialogsStorage)
+        public static ITurnDialogs Execute(IGameSession session, IDialogsStorage dialogsStorage)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -25,7 +25,7 @@ namespace OutlandSpace.Server.Engine.Execution.Calculation
             return resultTurnDialog;
         }
 
-        public static ITurnDialogs Execute(DialogsStorage dialogsStorage, int turn)
+        public static ITurnDialogs Execute(IDialogsStorage dialogsStorage, int turn)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -36,7 +36,7 @@ namespace OutlandSpace.Server.Engine.Execution.Calculation
             return resultTurnDialog;
         }
 
-        private static ITurnDialogs GetCurrentDialogSystem(DialogsStorage dialogsStorage, int turn)
+        private static ITurnDialogs GetCurrentDialogSystem(IDialogsStorage dialogsStorage, int turn)
         {
 
             foreach (var dialog in dialogsStorage.Dialogs)

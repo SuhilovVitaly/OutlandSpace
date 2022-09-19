@@ -106,7 +106,7 @@ namespace OutlandSpace.Tests.Server
         {
             IGameServer server = GlobalData.LocalServerWithTestData;
 
-            server.Initialization(GlobalData.MainScenarioId);
+            //server.Initialization(GlobalData.MainScenarioId);
 
             Thread.Sleep(1000);
 
@@ -124,11 +124,9 @@ namespace OutlandSpace.Tests.Server
 
             var snapshot = server.GetSnapshot();
 
-            var currentTurn = snapshot.Turn;
-
             var a = (server as LocalServer).GetServerTurnExecutionCount();
 
-            Assert.IsTrue(currentTurn > 0);
+            Assert.IsTrue(snapshot.Turn > 0);
         }
     }
 }

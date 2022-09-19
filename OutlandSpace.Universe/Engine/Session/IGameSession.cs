@@ -15,6 +15,6 @@ namespace OutlandSpace.Universe.Engine.Session
         IGameTurnSnapshot ToGameTurnSnapshot();
         IGameTurnSnapshot TurnExecute();
         ITurnDialogs Dialogs { get; }
-        void UpdateTurn(List<ICelestialObject> objects, int turns);
+        IDialogsStorage Storage { get; }
     }
 }

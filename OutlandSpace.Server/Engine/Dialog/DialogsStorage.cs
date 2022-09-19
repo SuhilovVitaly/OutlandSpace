@@ -7,7 +7,7 @@ using OutlandSpace.Universe.Engine.Dialogs;
 namespace OutlandSpace.Server.Engine.Dialog
 {
     [Serializable]
-    public class DialogsStorage
+    public class DialogsStorage: IDialogsStorage
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public List<IDialog> Dialogs { get; }  

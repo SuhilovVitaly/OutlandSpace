@@ -17,7 +17,7 @@ namespace OutlandSpace.Server.Engine.Session
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
         private protected StatusController Status = new();
-        private protected DialogsStorage Storage;
+        public IDialogsStorage Storage { get; private set; }
         public List<ICelestialObject> CelestialObjects { get; private set; }
        
 
@@ -54,7 +54,7 @@ namespace OutlandSpace.Server.Engine.Session
             Initialization(scenario.CelestialObjects, turnDialogs, storage);
         }
 
-        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, DialogsStorage storage)
+        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, IDialogsStorage storage)
         {
 
             Logger.Info("Start new game session.");
@@ -73,7 +73,7 @@ namespace OutlandSpace.Server.Engine.Session
 
             Turn++;
 
-            return new GameTurnSnapshot(Dialogs.DeepClone(), CelestialObjects.DeepClone(), Id, Turn, IsPause, IsDebug);
+            return ToGameTurnSnapshot();
 
         }
 
@@ -82,12 +82,6 @@ namespace OutlandSpace.Server.Engine.Session
             return CelestialObjects;
         }
 
-        // TODO: Remove it
-        public void UpdateTurn(List<ICelestialObject> objects, int turns)
-        {
-            CelestialObjects = objects;
-            Turn += turns;
-        }
 
         #region IStatus implementation
 

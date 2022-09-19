@@ -1,6 +1,8 @@
 ﻿using System;
 using OutlandSpace.Server;
 using OutlandSpace.Server.Engine.Dialog;
+using OutlandSpace.Server.Engine.Session;
+using OutlandSpace.Universe.Engine.Session;
 
 namespace OutlandSpace.Tests
 {
@@ -16,10 +18,20 @@ namespace OutlandSpace.Tests
 
         private static readonly DialogsStorage Storage = new DialogFactory().Initialize("TestsData");
 
+        public static IGameSession GameSessionWithMainScenarioId
+        {
+            get
+            {
+                return new GameSession(new Scenario(MainScenarioId, DialogsStorageWithTestData));
+            }
+            
+        }
+
         public static LocalServer LocalServerWithTestData
         {
             get
             {
+                LocalServer.Value.Initialization(MainScenarioId);
                 return LocalServer.Value;
             }
         }

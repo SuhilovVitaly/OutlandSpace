@@ -31,7 +31,7 @@ namespace OutlandSpace.Server.Engine.Execution
             return sessionRebuild;
         }
 
-        public static ITurnDialogs GetCurrentTurnDialogs(int turn, DialogsStorage storage)
+        public static ITurnDialogs GetCurrentTurnDialogs(int turn, IDialogsStorage storage)
         {
             return DialogsCalculation.Execute(storage, turn);
         }
