@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Universe\Engine\Dialog\**" />
+    <EmbeddedResource Remove="Universe\Engine\Dialog\**" />
+    <None Remove="Universe\Engine\Dialog\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -44,7 +50,6 @@
     <Folder Include="Server\Engine\" />
     <Folder Include="Server\Engine\Session\" />
     <Folder Include="Server\Dialog\" />
-    <Folder Include="Universe\Engine\Dialog\" />
     <Folder Include="Universe\Tools\" />
     <Folder Include="TestsData\" />
     <Folder Include="TestsData\Dialogs\" />

@@ -19,7 +19,8 @@ namespace OutlandSpace.Server.Engine.Session
         private protected StatusController Status = new();
         public IDialogsStorage Storage { get; private set; }
         public List<ICelestialObject> CelestialObjects { get; private set; }
-       
+        public IExecuteMetrics Metrics { get; } = new ExecuteMetrics();
+        
 
         public ITurnDialogs Dialogs { get; private set; }
 
@@ -66,15 +67,57 @@ namespace OutlandSpace.Server.Engine.Session
             Status.Pause();
         }
 
-        public IGameTurnSnapshot TurnExecute()
+        public IGameTurnSnapshot RealTimeTurnExecute()
         {
-            Dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage);
-            CelestialObjects = TurnCalculate.RecalculateLocations(Turn, CelestialObjects.DeepClone());
+            var millisecondAfterLastTurnExecution = (DateTime.UtcNow - Metrics.LastUpdate).TotalMilliseconds;
+            if (millisecondAfterLastTurnExecution < 1000)
+            {
+                // Recalculate celestial objects positions 10 times per second
+                CelestialObjects = LocationsExecute();
+                return ToGameTurnSnapshot();
+            }
 
-            Turn++;
+            // Recalculate all turn calculation 1 times per second
+
+            Dialogs = DialogsExecute();
+
+            EndTurnAndMetricsUpdate();
 
             return ToGameTurnSnapshot();
+        }
 
+        public IGameTurnSnapshot TurnExecute()
+        {
+            CelestialObjects = LocationsExecute();
+
+            Dialogs = DialogsExecute();
+
+            EndTurnAndMetricsUpdate();
+
+            return ToGameTurnSnapshot();
+        }
+
+        private List<ICelestialObject> LocationsExecute()
+        {
+            var celestialObjects = TurnCalculate.RecalculateLocations(Turn, CelestialObjects.DeepClone(), 0.1);
+            Metrics.IncreaseLocationCalculate();
+
+            return celestialObjects;
+        }
+
+        private ITurnDialogs DialogsExecute()
+        {
+            var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage);
+
+            return dialogs;
+        }
+
+        private void EndTurnAndMetricsUpdate()
+        {
+            Turn++;
+
+            Metrics.IncreaseTurn();
+            Metrics.UpdateLastExecution();
         }
 
         public List<ICelestialObject> GetCelestialObjects()

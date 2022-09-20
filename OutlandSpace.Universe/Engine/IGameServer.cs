@@ -9,7 +9,7 @@ namespace OutlandSpace.Universe.Engine
 
         IGameTurnSnapshot GetSnapshot();
 
-        IGameTurnSnapshot TurnExecute(IGameSession session, int count = 1);
+        IGameTurnSnapshot TurnExecute(IGameSession session);
 
         IGameTurnSnapshot TurnExecute(int count = 1);
 
@@ -20,5 +20,7 @@ namespace OutlandSpace.Universe.Engine
         void ResumeSession();
 
         void PauseSession();
+
+        IExecuteMetrics SessionMetrics();
     }
 }

@@ -104,29 +104,41 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void ResumedGameSessionOnServerShouldBeComputeTicks()
         {
-            IGameServer server = GlobalData.LocalServerWithTestData;
-
-            //server.Initialization(GlobalData.MainScenarioId);
+            IGameServer gameServer = GlobalData.LocalServerWithTestData;
 
             Thread.Sleep(1000);
 
-            var pausedTicks = server.GetServerTick();
+            var pausedTicks = gameServer.GetServerTick();
 
             Assert.IsTrue(pausedTicks > 0);
 
-            server.ResumeSession();
+            gameServer.ResumeSession();
 
             Thread.Sleep(5000);            
 
-            var serverTickSecondCheck = server.GetServerTick();
+            var serverTickSecondCheck = gameServer.GetServerTick();
 
             Assert.IsTrue(serverTickSecondCheck > pausedTicks);
 
-            var snapshot = server.GetSnapshot();
+            var snapshot = gameServer.GetSnapshot();
 
-            var a = (server as LocalServer).GetServerTurnExecutionCount();
+            var metrics = gameServer.SessionMetrics();
 
             Assert.IsTrue(snapshot.Turn > 0);
+        }
+
+        [Test]
+        public void MetricsOnRunningGameSessionShouldBeCorrect()
+        {
+            IGameServer gameServer = GlobalData.LocalServerWithTestData;
+
+            gameServer.ResumeSession();
+
+            Thread.Sleep(1000);
+
+            var metrics = gameServer.SessionMetrics();
+            // TODO: For 1 second execution we get 35 server ticks and 20 location recalculate but need get ~10
+            Assert.IsTrue(metrics.TickCounter > 0);
         }
     }
 }

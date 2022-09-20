@@ -9,22 +9,13 @@ namespace OutlandSpace.Server.Engine.Execution.Calculation
 {
     public static class RecalculateCelestialObjectsLocations
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
 
-        public static List<ICelestialObject> Execute(IGameSession session)
+        public static List<ICelestialObject> Execute(List<ICelestialObject> objects, int turn, double ticks = 1)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            _logger.Debug($"Turn {session.Turn}. [RecalculateCelestialObjectsLocations] finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
-
-            return session.CelestialObjects;
-        }
-
-        public static List<ICelestialObject> Execute(List<ICelestialObject> objects, int turn)
-        {
-            var stopwatch = Stopwatch.StartNew();
-
-            _logger.Debug($"Turn {turn}. [RecalculateCelestialObjectsLocations] finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
+            Logger.Debug($"Turn {turn}. [RecalculateCelestialObjectsLocations] finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
 
             return objects;
         }

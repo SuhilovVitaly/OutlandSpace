@@ -17,7 +17,7 @@ namespace OutlandSpace.Server
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const int TurnMilliseconds = 100;
+        private const int TurnMilliseconds = 50;
 
         private protected GameSession session;
         private protected Api api;
@@ -77,11 +77,18 @@ namespace OutlandSpace.Server
             _logger.Info($"[PauseSession] Succeeded.");
         }
 
-        private bool _executionInProgress = false;
+        public IExecuteMetrics SessionMetrics()
+        {
+            return session.Metrics;
+        }
+
+        private bool _executionInProgress;
 
         private void ExecuteTurnCalculation()
         {
             _serverTickCounter++;
+
+            session.Metrics.IncreaseTick();
 
             if (session.IsPause || _executionInProgress) return;
 
@@ -100,18 +107,18 @@ namespace OutlandSpace.Server
             _executionInProgress = false;
         }
 
-        public IGameTurnSnapshot TurnExecute(IGameSession sessionForExecute, int count = 1)
+        public IGameTurnSnapshot TurnExecute(IGameSession sessionForExecute)
         {
             _serverTurnCounter++;
 
-            return session.TurnExecute();
+            return sessionForExecute.RealTimeTurnExecute();
         }
 
         public IGameTurnSnapshot TurnExecute(int count = 1)
         {
-            for(int i = 0; i < count; i++)
+            for(var i = 0; i < count; i++)
             {
-                TurnExecute(session);
+                session.TurnExecute();
             }
 
             return session.ToGameTurnSnapshot();

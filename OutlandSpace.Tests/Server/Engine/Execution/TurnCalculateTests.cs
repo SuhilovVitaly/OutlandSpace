@@ -9,14 +9,6 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
     public class TurnCalculateTests
     {
         [Test]
-        public void AfterExecuteTurnNumberShouldBeTurnPlusOne()
-        {
-            var turnExecuteSnapshot = TurnCalculate.Execute(new GameSession(null, null), GlobalData.DialogsStorageWithTestData);
-
-            Assert.That(turnExecuteSnapshot.Turn == 1);
-        }
-
-        [Test]
         public void AfterExecuteTwoTurnsNumberShouldBeTurnPlusTwo()
         {
             var session = GlobalData.GameSessionWithMainScenarioId;
