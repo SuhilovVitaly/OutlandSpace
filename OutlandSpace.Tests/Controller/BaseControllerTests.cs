@@ -82,5 +82,38 @@ namespace OutlandSpace.Tests
             Assert.IsTrue(snapshot.GetCelestialObjects().Count == 2);
         }
 
+        [Test]
+        public void WorkerShouldRefreshSnapshotForRunningServerAfterPause()
+        {
+            var worker = new Worker();
+
+            worker.StartNewGameSession(GlobalData.MainScenarioId, 100);
+
+            worker.SessionResume();
+
+            Thread.Sleep(3500);
+
+            var snapshot = worker.GetSnapshot();
+
+            Assert.IsTrue(snapshot.Turn > 3);
+            Assert.IsTrue(snapshot.GetCelestialObjects().Count == 2);
+
+            worker.SessionPause();
+
+            Thread.Sleep(1500);
+
+            var snapshotAfterPause = worker.GetSnapshot();
+
+            Assert.IsTrue(snapshot.Turn == snapshotAfterPause.Turn);
+
+            worker.SessionResume();
+
+            Thread.Sleep(1500);
+
+            var snapshotAfterResume = worker.GetSnapshot();
+
+            Assert.IsTrue(snapshot.Turn < snapshotAfterResume.Turn);
+        }
+
     }
 }

@@ -51,6 +51,7 @@ namespace OutlandSpace.Controller
         public void SessionPause()
         {
             //Logger.Info($"Game paused. Turn is {_session.Turn}");
+            _gameServer.PauseSession();
         }
 
         public void StartNewGameSession(string scenarioId, int ticks = 25)
