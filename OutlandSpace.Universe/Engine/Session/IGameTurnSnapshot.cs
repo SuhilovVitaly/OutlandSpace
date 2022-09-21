@@ -6,7 +6,7 @@ namespace OutlandSpace.Universe.Engine.Session
 {
     public interface IGameTurnSnapshot
     {
-        int Id { get; set; }
+        string Id { get; set; }
 
         int Turn { get; }
 

@@ -24,6 +24,7 @@ namespace OutlandSpace.Server.Engine.Session
         public ITurnDialogs Dialogs { get; private set; }
 
         public int Id { get; set; }
+        private string lastSnapshotId;
 
         public int Turn { get; private set; }
 
@@ -35,7 +36,7 @@ namespace OutlandSpace.Server.Engine.Session
             return new GameTurnSnapshot(
                 Dialogs,
                 CelestialObjects,
-                Id,
+                lastSnapshotId,
                 Turn,
                 IsPause,
                 IsDebug);
@@ -79,6 +80,8 @@ namespace OutlandSpace.Server.Engine.Session
             }
 
             var stopwatch = Stopwatch.StartNew();
+
+            lastSnapshotId = Guid.NewGuid().ToString();
 
             // Recalculate all turn calculation 1 times per second
 

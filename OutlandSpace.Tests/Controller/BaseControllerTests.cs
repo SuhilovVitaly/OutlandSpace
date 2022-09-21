@@ -56,13 +56,30 @@ namespace OutlandSpace.Tests
 
             Thread.Sleep(1000);
 
-            var currentRequestsCount = worker.GetRefreshCounter();
+            var currentRequestsCount = worker.Metrics.TickCounter;
 
             Assert.IsTrue(currentRequestsCount > 0);
 
             Thread.Sleep(1000);
 
-            Assert.IsTrue(worker.GetRefreshCounter() > currentRequestsCount);
+            Assert.IsTrue(worker.Metrics.TickCounter > currentRequestsCount);            
+        }
+
+        [Test]
+        public void WorkerShouldRefreshSnapshotForRunningServer()
+        {
+            var worker = new Worker();
+
+            worker.StartNewGameSession(GlobalData.MainScenarioId, 100);
+
+            worker.SessionResume();
+
+            Thread.Sleep(3500);
+
+            var snapshot = worker.GetSnapshot();
+
+            Assert.IsTrue(snapshot.Turn > 3);
+            Assert.IsTrue(snapshot.GetCelestialObjects().Count == 2);
         }
 
     }

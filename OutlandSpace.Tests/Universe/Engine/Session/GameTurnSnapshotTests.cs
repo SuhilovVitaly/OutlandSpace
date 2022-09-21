@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using NUnit.Framework;
 using OutlandSpace.Server.Engine.Session;
-using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
-using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Tests.Universe.Engine.Session
 {
@@ -19,13 +17,13 @@ namespace OutlandSpace.Tests.Universe.Engine.Session
 
             var session = new GameSession(scenario);
 
-            gameTurnSnapshot = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects, session.Id, session.Turn + 1, session.IsPause, session.IsDebug);
+            gameTurnSnapshot = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects, Guid.NewGuid().ToString(), session.Turn + 1, session.IsPause, session.IsDebug);
         }
 
         [Test]
         public void GameTurnSnapshotShouldBeCorrect()
         {
-            Assert.IsTrue(gameTurnSnapshot.Id == 0);
+            Assert.IsTrue(gameTurnSnapshot.Id != string.Empty);
             Assert.IsTrue(gameTurnSnapshot.IsDebug == false);
             Assert.IsTrue(gameTurnSnapshot.IsPause == true);
         }
