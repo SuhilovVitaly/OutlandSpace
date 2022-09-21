@@ -20,13 +20,14 @@ namespace OutlandSpace.Server.Engine.Session
         public IDialogsStorage Storage { get; private set; }
         public List<ICelestialObject> CelestialObjects { get; private set; }
         public IExecuteMetrics Metrics { get; } = new ExecuteMetrics();
-        
-
         public ITurnDialogs Dialogs { get; private set; }
 
         public int Id { get; set; }
 
         public int Turn { get; private set; }
+
+        private const double granularityAtomic = 0.1;
+        private const double granularityTurn = 1.0;
 
         public IGameTurnSnapshot ToGameTurnSnapshot()
         {
@@ -73,11 +74,13 @@ namespace OutlandSpace.Server.Engine.Session
             if (millisecondAfterLastTurnExecution < 1000)
             {
                 // Recalculate celestial objects positions 10 times per second
-                CelestialObjects = LocationsExecute();
+                CelestialObjects = LocationsExecute(granularityAtomic);
                 return ToGameTurnSnapshot();
             }
 
             // Recalculate all turn calculation 1 times per second
+
+            CelestialObjects = LocationsExecute(granularityAtomic);
 
             Dialogs = DialogsExecute();
 
@@ -88,7 +91,7 @@ namespace OutlandSpace.Server.Engine.Session
 
         public IGameTurnSnapshot TurnExecute()
         {
-            CelestialObjects = LocationsExecute();
+            CelestialObjects = LocationsExecute(granularityTurn);
 
             Dialogs = DialogsExecute();
 
@@ -97,9 +100,9 @@ namespace OutlandSpace.Server.Engine.Session
             return ToGameTurnSnapshot();
         }
 
-        private List<ICelestialObject> LocationsExecute()
+        private List<ICelestialObject> LocationsExecute(double granularity)
         {
-            var celestialObjects = TurnCalculate.RecalculateLocations(Turn, CelestialObjects.DeepClone(), 0.1);
+            var celestialObjects = TurnCalculate.RecalculateLocations(Turn, CelestialObjects.DeepClone(), granularity);
             Metrics.IncreaseLocationCalculate();
 
             return celestialObjects;

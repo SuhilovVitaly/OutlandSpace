@@ -4,7 +4,6 @@ using System.Threading;
 using log4net;
 using OutlandSpace.Server.Engine;
 using OutlandSpace.Server.Engine.Dialog;
-using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Dialogs;
@@ -17,7 +16,7 @@ namespace OutlandSpace.Server
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const int TurnMilliseconds = 50;
+        private const int TurnMilliseconds = 100;
 
         private protected GameSession session;
         private protected Api api;
