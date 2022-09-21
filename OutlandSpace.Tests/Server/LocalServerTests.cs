@@ -101,30 +101,22 @@ namespace OutlandSpace.Tests.Server
             Assert.IsTrue(serverTickSecondCheck > serverTickFirstCheck);
         }
 
+
         [Test]
         public void ResumedGameSessionOnServerShouldBeComputeTicks()
         {
-            IGameServer gameServer = GlobalData.LocalServerWithTestData;
+            var server = new LocalServer("TestsData");
+            server.Initialization(GlobalData.MainScenarioId);
 
             Thread.Sleep(1000);
 
-            var pausedTicks = gameServer.Metrics.TickCounter;
+            server.ResumeSession();
 
-            Assert.IsTrue(pausedTicks > 0);
+            Thread.Sleep(5000);
 
-            gameServer.ResumeSession();
+            var sessionMetrics = server.SessionMetrics();
 
-            Thread.Sleep(5000);            
-
-            var serverTickSecondCheck = gameServer.Metrics.TickCounter;
-
-            Assert.IsTrue(serverTickSecondCheck > pausedTicks);
-
-            var snapshot = gameServer.GetSnapshot();
-
-            var metrics = gameServer.SessionMetrics();
-
-            Assert.IsTrue(snapshot.Turn > 0);
+            Assert.IsTrue(sessionMetrics.TurnCounter == 5);
         }
     }
 }

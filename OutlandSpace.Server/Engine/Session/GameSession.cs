@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using log4net;
 using OutlandSpace.Server.Engine.Dialog;
@@ -58,7 +59,6 @@ namespace OutlandSpace.Server.Engine.Session
 
         private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, IDialogsStorage storage)
         {
-
             Logger.Info("Start new game session.");
 
             CelestialObjects = objects;
@@ -78,13 +78,15 @@ namespace OutlandSpace.Server.Engine.Session
                 return ToGameTurnSnapshot();
             }
 
+            var stopwatch = Stopwatch.StartNew();
+
             // Recalculate all turn calculation 1 times per second
 
             CelestialObjects = LocationsExecute(granularityAtomic);
 
             Dialogs = DialogsExecute();
 
-            EndTurnAndMetricsUpdate();
+            EndTurnAndMetricsUpdate(stopwatch.Elapsed.TotalMilliseconds);
 
             return ToGameTurnSnapshot();
         }
@@ -95,7 +97,7 @@ namespace OutlandSpace.Server.Engine.Session
 
             Dialogs = DialogsExecute();
 
-            EndTurnAndMetricsUpdate();
+            EndTurnAndMetricsUpdate(0);
 
             return ToGameTurnSnapshot();
         }
@@ -115,12 +117,12 @@ namespace OutlandSpace.Server.Engine.Session
             return dialogs;
         }
 
-        private void EndTurnAndMetricsUpdate()
+        private void EndTurnAndMetricsUpdate(double executionTimeInMilliseconds)
         {
             Turn++;
 
             Metrics.IncreaseTurn();
-            Metrics.UpdateLastExecution();
+            Metrics.UpdateLastExecution(executionTimeInMilliseconds);
         }
 
         public List<ICelestialObject> GetCelestialObjects()

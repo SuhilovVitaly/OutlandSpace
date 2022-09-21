@@ -10,6 +10,10 @@ namespace OutlandSpace.Server.Engine.Session
         public int LocationCalculateCounter { get; set; }
         public DateTime LastUpdate { get; set; }
 
+        public double LastExecutionTimeMs { get; set; }
+
+        public double AveregeExecutionTimeMs { get; set; }
+
         public void IncreaseLocationCalculate()
         {
             LocationCalculateCounter++;
@@ -25,8 +29,11 @@ namespace OutlandSpace.Server.Engine.Session
             TickCounter++;
         }
 
-        public void UpdateLastExecution()
+        public void UpdateLastExecution(double executionTimeInMilliseconds)
         {
+            LastExecutionTimeMs = executionTimeInMilliseconds;
+            AveregeExecutionTimeMs = (AveregeExecutionTimeMs + executionTimeInMilliseconds) / 2;
+
             LastUpdate = DateTime.UtcNow;
         }
     }

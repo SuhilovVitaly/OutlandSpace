@@ -10,6 +10,10 @@ namespace OutlandSpace.Universe.Engine.Session
 
         int LocationCalculateCounter { get; }
 
+        double LastExecutionTimeMs { get; }
+
+        double AveregeExecutionTimeMs { get; }
+
         DateTime LastUpdate { get; set; }
 
         void IncreaseLocationCalculate();
@@ -18,6 +22,6 @@ namespace OutlandSpace.Universe.Engine.Session
 
         void IncreaseTick();
 
-        void UpdateLastExecution();
+        void UpdateLastExecution(double executionTimeInMilliseconds);
     }
 }
