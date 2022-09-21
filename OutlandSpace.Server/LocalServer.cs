@@ -24,10 +24,9 @@ namespace OutlandSpace.Server
         private protected DialogsStorage dialogsStorage;
         private protected Health health;
 
-        private long _serverTickCounter;
-        private long _serverTurnCounter;
-
         private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
+
+        public IServerMetrics Metrics { get; private set; } 
 
         public LocalServer(string dataFolder = "Data")
         {
@@ -41,6 +40,8 @@ namespace OutlandSpace.Server
         {
             dictionaryLock.EnterWriteLock();
 
+            Metrics = new ServerMetrics();
+
             IScenario scenario = new Scenario(scenarioId, dialogsStorage, source);
 
             session = new GameSession(scenario);
@@ -53,17 +54,6 @@ namespace OutlandSpace.Server
 
             return turnSnapshot;
         }
-
-        public long GetServerTick()
-        {
-            return _serverTickCounter;
-        }
-
-        public long GetServerTurnExecutionCount()
-        {
-            return _serverTurnCounter;
-        }
-        
 
         public void ResumeSession()
         {
@@ -83,10 +73,11 @@ namespace OutlandSpace.Server
         }
 
         private bool _executionInProgress;
+        
 
         private void ExecuteTurnCalculation()
         {
-            _serverTickCounter++;
+            Metrics.IncreaseTick();
 
             session.Metrics.IncreaseTick();
 
@@ -109,7 +100,7 @@ namespace OutlandSpace.Server
 
         public IGameTurnSnapshot TurnExecute(IGameSession sessionForExecute)
         {
-            _serverTurnCounter++;
+            Metrics.IncreaseTurn();
 
             return sessionForExecute.RealTimeTurnExecute();
         }

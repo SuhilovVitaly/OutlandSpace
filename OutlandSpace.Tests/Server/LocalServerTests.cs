@@ -90,13 +90,13 @@ namespace OutlandSpace.Tests.Server
 
             Thread.Sleep(1000);
 
-            var serverTickFirstCheck = server.GetServerTick();
+            var serverTickFirstCheck = server.Metrics.TickCounter;
 
             Assert.IsTrue(serverTickFirstCheck > 0);
 
             Thread.Sleep(1000);
 
-            var serverTickSecondCheck = server.GetServerTick();
+            var serverTickSecondCheck = server.Metrics.TickCounter;
 
             Assert.IsTrue(serverTickSecondCheck > serverTickFirstCheck);
         }
@@ -108,7 +108,7 @@ namespace OutlandSpace.Tests.Server
 
             Thread.Sleep(1000);
 
-            var pausedTicks = gameServer.GetServerTick();
+            var pausedTicks = gameServer.Metrics.TickCounter;
 
             Assert.IsTrue(pausedTicks > 0);
 
@@ -116,7 +116,7 @@ namespace OutlandSpace.Tests.Server
 
             Thread.Sleep(5000);            
 
-            var serverTickSecondCheck = gameServer.GetServerTick();
+            var serverTickSecondCheck = gameServer.Metrics.TickCounter;
 
             Assert.IsTrue(serverTickSecondCheck > pausedTicks);
 
@@ -125,20 +125,6 @@ namespace OutlandSpace.Tests.Server
             var metrics = gameServer.SessionMetrics();
 
             Assert.IsTrue(snapshot.Turn > 0);
-        }
-
-        [Test]
-        public void MetricsOnRunningGameSessionShouldBeCorrect()
-        {
-            IGameServer gameServer = GlobalData.LocalServerWithTestData;
-
-            gameServer.ResumeSession();
-
-            Thread.Sleep(1000);
-
-            var metrics = gameServer.SessionMetrics();
-            // TODO: For 1 second execution we get 35 server ticks and 20 location recalculate but need get ~10
-            Assert.IsTrue(metrics.TickCounter > 0);
         }
     }
 }
