@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
@@ -16,6 +16,6 @@ namespace OutlandSpace.Universe.Engine.Session
 
         ITurnDialogs Dialogs { get; set; }
 
-        List<ICelestialObject> GetCelestialObjects();
+        ImmutableList<ICelestialObject> GetCelestialObjects();
     }
 }

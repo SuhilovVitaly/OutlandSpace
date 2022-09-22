@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Immutable;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
@@ -8,7 +6,7 @@ namespace OutlandSpace.Universe.Engine.Session
 {
     public class GameTurnSnapshot : IGameTurnSnapshot
     {
-        public GameTurnSnapshot(ITurnDialogs dialogs, List<ICelestialObject> objects, string id, int turn, bool isPause, bool isDebug)
+        public GameTurnSnapshot(ITurnDialogs dialogs, ImmutableList<ICelestialObject> objects, string id, int turn, bool isPause, bool isDebug)
         {
             Id = id;
             Turn = turn;
@@ -25,9 +23,9 @@ namespace OutlandSpace.Universe.Engine.Session
 
         public ITurnDialogs Dialogs { get; set; }
 
-        private List<ICelestialObject> celestialObjects;
+        private ImmutableList<ICelestialObject> celestialObjects;
 
-        public List<ICelestialObject> GetCelestialObjects()
+        public ImmutableList<ICelestialObject> GetCelestialObjects()
         {
             return celestialObjects;
         }

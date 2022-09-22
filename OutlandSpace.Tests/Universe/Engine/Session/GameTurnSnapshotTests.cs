@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using NUnit.Framework;
 using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine.Session;
@@ -17,7 +18,7 @@ namespace OutlandSpace.Tests.Universe.Engine.Session
 
             var session = new GameSession(scenario);
 
-            gameTurnSnapshot = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects, Guid.NewGuid().ToString(), session.Turn + 1, session.IsPause, session.IsDebug);
+            gameTurnSnapshot = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects.ToImmutableList(), Guid.NewGuid().ToString(), session.Turn + 1, session.IsPause, session.IsDebug);
         }
 
         [Test]

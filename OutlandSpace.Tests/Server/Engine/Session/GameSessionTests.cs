@@ -61,16 +61,6 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         }
 
         [Test]
-        public void EmptySessionConvertToTurnSnapshotShouldBeCorrect()
-        {
-            var session = new GameSession(null, null);
-
-            var result = session.ToGameTurnSnapshot();
-
-            Assert.IsNull(result.Dialogs);
-        }
-
-        [Test]
         public void ConvertToTurnSnapshotShouldBeCorrect()
         {
             var celestialObjects = new List<ICelestialObject>

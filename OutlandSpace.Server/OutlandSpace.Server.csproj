@@ -22,6 +22,7 @@
     <None Remove="log4net" />
     <None Remove="Engine\Execution\Calculation\" />
     <None Remove="Data\Scenarios\" />
+    <None Remove="System.Collections.Immutable" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Dialog\" />
@@ -34,6 +35,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Dialogs\DialogsPack_001.json">

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using log4net;
 using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Universe.Engine.Dialogs;
-using OutlandSpace.Universe.Engine.Session;
-using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Server.Engine.Execution.Calculation
 {

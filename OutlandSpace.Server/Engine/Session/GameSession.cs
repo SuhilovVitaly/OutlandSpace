@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using log4net;
+using System.Collections.Immutable;
 using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
-using OutlandSpace.Universe.Tools;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -35,7 +35,7 @@ namespace OutlandSpace.Server.Engine.Session
         {
             return new GameTurnSnapshot(
                 Dialogs,
-                CelestialObjects,
+                CelestialObjects.ToImmutableList(),
                 lastSnapshotId,
                 Turn,
                 IsPause,
@@ -79,13 +79,21 @@ namespace OutlandSpace.Server.Engine.Session
                 return ToGameTurnSnapshot();
             }
 
-            var stopwatch = Stopwatch.StartNew();
-
-            lastSnapshotId = Guid.NewGuid().ToString();
-
             // Recalculate all turn calculation 1 times per second
 
-            CelestialObjects = LocationsExecute(granularityAtomic);
+            return TurnExecute(granularityAtomic, Stopwatch.StartNew());
+        }
+
+        public IGameTurnSnapshot TurnExecute()
+        {
+            return TurnExecute(granularityTurn, Stopwatch.StartNew());
+        }
+
+        private IGameTurnSnapshot TurnExecute(double granularity, Stopwatch stopwatch)
+        {
+            lastSnapshotId = Guid.NewGuid().ToString();
+
+            CelestialObjects = LocationsExecute(granularity);
 
             Dialogs = DialogsExecute();
 
@@ -94,20 +102,9 @@ namespace OutlandSpace.Server.Engine.Session
             return ToGameTurnSnapshot();
         }
 
-        public IGameTurnSnapshot TurnExecute()
-        {
-            CelestialObjects = LocationsExecute(granularityTurn);
-
-            Dialogs = DialogsExecute();
-
-            EndTurnAndMetricsUpdate(0);
-
-            return ToGameTurnSnapshot();
-        }
-
         private List<ICelestialObject> LocationsExecute(double granularity)
         {
-            var celestialObjects = TurnCalculate.RecalculateLocations(Turn, CelestialObjects.DeepClone(), granularity);
+            var celestialObjects = TurnCalculate.RecalculateLocations(Turn, CelestialObjects.ToImmutableList(), granularity);
             Metrics.IncreaseLocationCalculate();
 
             return celestialObjects;
