@@ -1,45 +1,21 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using log4net;
-using OutlandSpace.Server.Engine.Dialog;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using OutlandSpace.Server.Engine.Execution.Calculation;
-using OutlandSpace.Server.Engine.Session;
-using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Engine.Dialogs;
+using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Server.Engine.Execution
 {
     public class TurnCalculate
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        public static GameSession Execute(IGameSession session, DialogsStorage dialogsStorage)
+        public static ITurnDialogs GetCurrentTurnDialogs(int turn, IDialogsStorage storage)
         {
-            var stopwatch = Stopwatch.StartNew();
-
-            var turnDialogs = DialogsCalculation.Execute(session, dialogsStorage);
-            var objects = RecalculateCelestialObjectsLocations.Execute(session);
-            var turn = TurnPropertiesCalculation.Execute(session);
-
-            var sessionRebuilded = new GameSession(objects, turnDialogs, turn);
-
-            _logger.Debug($"Turn {sessionRebuilded.Turn}. Calculation finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
-
-            return sessionRebuilded;
+            return DialogsCalculation.Execute(storage, turn);
         }
 
-        public static GameSession Initialization(IScenario scenario, DialogsStorage dialogsStorage)
+        public static List<ICelestialObject> RecalculateLocations(int turn, ImmutableList<ICelestialObject> objects, double ticks = 1)
         {
-            var stopwatch = Stopwatch.StartNew();
-
-            dialogsStorage.Dialogs.AddRange(scenario.Dialogs);
-
-            var turnDialogs = DialogsCalculation.Execute(dialogsStorage, 0);
-
-            var session = new GameSession(scenario.CelestialObjects, turnDialogs);
-
-            _logger.Debug($"Turn {session.Turn}. Initialization finished {stopwatch.Elapsed.TotalMilliseconds} ms.");
-
-            return session;
+            return RecalculateCelestialObjectsLocations.Execute(objects, turn, ticks);
         }
     }
 }

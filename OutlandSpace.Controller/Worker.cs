@@ -9,9 +9,9 @@ namespace OutlandSpace.Controller
 {
     public class Worker : IGameEvents
     {
+        public IWorkerMetrics Metrics { get; private set; }
         private readonly IGameServer _gameServer;
         private IGameTurnSnapshot _turnSnapshot;
-        private long _refreshCounter;
         private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
 
         public event Action<IGameTurnSnapshot> OnStartGame;
@@ -26,10 +26,13 @@ namespace OutlandSpace.Controller
         public Worker()
         {
             _gameServer = new LocalServer();
+
+            Metrics = new WorkerMetrics();
         }
 
         public IGameTurnSnapshot GetSnapshot()
         {
+            
             return _turnSnapshot;
         }
 
@@ -42,12 +45,13 @@ namespace OutlandSpace.Controller
         {
             //Logger.Info($"Game resumed. Turn is {_session.Turn}");
 
-            //_gameServer.ResumeSession(_session.Id);
+            _gameServer.ResumeSession();
         }
 
         public void SessionPause()
         {
             //Logger.Info($"Game paused. Turn is {_session.Turn}");
+            _gameServer.PauseSession();
         }
 
         public void StartNewGameSession(string scenarioId, int ticks = 25)
@@ -72,22 +76,24 @@ namespace OutlandSpace.Controller
         {
             dictionaryLock.EnterWriteLock();
 
-            _refreshCounter++;
+            Metrics.IncreaseTick();
 
             if (_turnSnapshot == null) throw new NullReferenceException();
 
             var timeMetricGetGameSession = Stopwatch.StartNew();
 
-            var gameSession = _gameServer.GetSnapshot();
+            var snapshot = _gameServer.GetSnapshot();
+
+            if(snapshot.Id != _turnSnapshot.Id)
+            {
+                // TODO: Invoke new turn
+                Metrics.IncreaseTurn();
+                _turnSnapshot = snapshot;
+            }
 
             timeMetricGetGameSession.Stop();
 
             dictionaryLock.ExitWriteLock();
-        }
-
-        public long GetRefreshCounter()
-        {
-            return _refreshCounter;
         }
     }
 }

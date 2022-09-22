@@ -4,7 +4,6 @@ using System.Threading;
 using log4net;
 using OutlandSpace.Server.Engine;
 using OutlandSpace.Server.Engine.Dialog;
-using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Dialogs;
@@ -17,23 +16,22 @@ namespace OutlandSpace.Server
     {
         private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        private const int TurnMilliseconds = 100;
 
         private protected GameSession session;
         private protected Api api;
         private protected DialogsStorage dialogsStorage;
         private protected Health health;
 
-        private long _serverTickCounter;
-        private long _serverTurnCounter;
-
         private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
-        private readonly ReaderWriterLockSlim tickTurnExecuteLock = new ReaderWriterLockSlim();
+
+        public IServerMetrics Metrics { get; private set; } 
 
         public LocalServer(string dataFolder = "Data")
         {
             api = new Api();
             health = new Health();
-            session = new GameSession();
+
             dialogsStorage = new DialogFactory().Initialize(dataFolder);
         }
 
@@ -41,82 +39,50 @@ namespace OutlandSpace.Server
         {
             dictionaryLock.EnterWriteLock();
 
-            IScenario scenario = new Scenario(scenarioId, source);
+            Metrics = new ServerMetrics();
 
-            session = TurnCalculate.Initialization(scenario, dialogsStorage);
+            IScenario scenario = new Scenario(scenarioId, dialogsStorage, source);
+
+            session = new GameSession(scenario);
 
             dictionaryLock.ExitWriteLock();
 
-            var turnSnapshot = ConvertGameSessionToGameTurnSnapshot(session);
+            var turnSnapshot = session.ToGameTurnSnapshot();
 
-            Scheduler.Instance.ScheduleTask(50, 50, ExecuteTurnCalculation, null);
+            Scheduler.Instance.ScheduleTask(50, TurnMilliseconds, ExecuteTurnCalculation, null);
 
             return turnSnapshot;
         }
 
-        public long GetServerTick()
-        {
-            return _serverTickCounter;
-        }
-
-        public long GetServerTurnExecutionCount()
-        {
-            return _serverTurnCounter;
-        }
-        
-
-        private bool _commandResume = false;
         public void ResumeSession()
         {
-            _commandResume = true;
+            session.Resume();
             _logger.Info($"[ResumeSession] Succeeded.");
         }
 
-        private bool _commandPause = false;
         public void PauseSession()
         {
-            _commandPause = true;
+            session.Pause();
             _logger.Info($"[PauseSession] Succeeded.");
         }
 
-        private bool isDebug;
-        private bool _executionInProgress = false;
+        public IExecuteMetrics SessionMetrics()
+        {
+            return session.Metrics;
+        }
+
+        private bool _executionInProgress;
+        
+
         private void ExecuteTurnCalculation()
         {
-            //if (isDebug) return;
-            //isDebug = true;
+            Metrics.IncreaseTick();
 
-            if (_executionInProgress) return;
-            _executionInProgress = true;
+            session.Metrics.IncreaseTick();
 
+            if (session.IsPause || _executionInProgress) return;
 
-            _serverTickCounter++;
-
-            if (_commandResume)
-            {
-                try
-                {
-                    session.Resume();
-                    _commandResume = false;
-                }
-                catch (Exception ex)
-                {
-                    _commandResume = false;
-                }
-                
-            }
-
-            if (_commandPause)
-            {
-                session.Pause();
-                _commandPause = false;
-            }
-
-            if (session.IsPause)
-            {
-                _executionInProgress = false;
-                return;
-            }
+            _executionInProgress = true;            
 
             try
             {
@@ -124,66 +90,28 @@ namespace OutlandSpace.Server
             }
             catch (Exception ex)
             {
+                _logger.Error(ex.Message);
                 _executionInProgress = false;
             }
-            
 
             _executionInProgress = false;
-            isDebug = false;
         }
 
-        public IGameTurnSnapshot TurnExecute(IGameSession sessionForExecute, int count = 1)
+        public IGameTurnSnapshot TurnExecute(IGameSession sessionForExecute)
         {
-            _serverTurnCounter++;
-            try
-            {
-                session = UpdateSession(TurnCalculate.Execute(sessionForExecute, dialogsStorage), sessionForExecute);
-            }
-            catch (Exception ex)
-            {
-                var error = ex.Message;
-            }
-            
+            Metrics.IncreaseTurn();
 
-            return ConvertGameSessionToGameTurnSnapshot(session);
-        }
-
-        private GameSession UpdateSession(GameSession rebuildedSession, IGameSession coreSession)
-        {
-            var objects = rebuildedSession.GetCelestialObjects().DeepClone();
-            var dialogs = rebuildedSession.Dialogs.DeepClone();
-
-
-            var endTurnSession = new GameSession(objects, dialogs);
-
-            if(coreSession.IsPause)
-            {
-                endTurnSession.Pause();
-            }
-            else
-            {
-                endTurnSession.Resume();
-            }
-
-            endTurnSession.UpdateTurn(rebuildedSession.GetCelestialObjects(), 1);
-
-            return endTurnSession;
-        }
-
-        private IGameTurnSnapshot ConvertGameSessionToGameTurnSnapshot(IGameSession session)
-        {
-            return new GameTurnSnapshot(
-                session.Dialogs, 
-                session.CelestialObjects, 
-                session.Id, 
-                session.Turn, 
-                session.IsPause, 
-                session.IsDebug);
+            return sessionForExecute.RealTimeTurnExecute();
         }
 
         public IGameTurnSnapshot TurnExecute(int count = 1)
         {
-            return TurnExecute(session);
+            for(var i = 0; i < count; i++)
+            {
+                session.TurnExecute();
+            }
+
+            return session.ToGameTurnSnapshot();
         }
 
         public IDialog GetDialog(string id) => api.GetDialog(id, dialogsStorage);
@@ -199,9 +127,7 @@ namespace OutlandSpace.Server
 
         public IGameTurnSnapshot GetSnapshot()
         {
-            var result = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects, session.Id, session.Turn, session.IsPause, session.IsDebug);
-
-            return result;
+            return session.ToGameTurnSnapshot();
         }
     }
 }

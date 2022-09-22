@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
@@ -12,7 +13,11 @@ namespace OutlandSpace.Universe.Engine.Session
         bool IsDebug { get; set; }
         string ScenarioName { get; }
         List<ICelestialObject> CelestialObjects { get; }
+        IGameTurnSnapshot ToGameTurnSnapshot();
+        IGameTurnSnapshot TurnExecute();
+        IGameTurnSnapshot RealTimeTurnExecute();
         ITurnDialogs Dialogs { get; }
-        void UpdateTurn(List<ICelestialObject> objects, int turns);
+        IDialogsStorage Storage { get; }
+        IExecuteMetrics Metrics { get; }
     }
 }

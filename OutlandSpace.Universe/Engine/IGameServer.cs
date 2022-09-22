@@ -5,20 +5,22 @@ namespace OutlandSpace.Universe.Engine
 {
     public interface IGameServer
     {
+        IServerMetrics Metrics { get; }
+
         IGameTurnSnapshot Initialization(string scenarioId, string source = "Data");
 
         IGameTurnSnapshot GetSnapshot();
 
-        IGameTurnSnapshot TurnExecute(IGameSession session, int count = 1);
+        IGameTurnSnapshot TurnExecute(IGameSession session);
 
         IGameTurnSnapshot TurnExecute(int count = 1);
-
-        long GetServerTick();
 
         IDialog DialogResponse(string dialogId);
 
         void ResumeSession();
 
         void PauseSession();
+
+        IExecuteMetrics SessionMetrics();
     }
 }

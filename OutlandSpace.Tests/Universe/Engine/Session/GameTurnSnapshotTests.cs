@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Immutable;
 using NUnit.Framework;
 using OutlandSpace.Server.Engine.Session;
-using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
-using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Tests.Universe.Engine.Session
 {
@@ -15,17 +14,17 @@ namespace OutlandSpace.Tests.Universe.Engine.Session
         [SetUp]
         public void SetUp()
         {
-            ITurnDialogs turnDialogs = null;
-            List<ICelestialObject> objects = null;
-            IGameSession session = new GameSession();
+            IScenario scenario = new Scenario(GlobalData.MainScenarioId, GlobalData.DialogsStorageWithTestData);
 
-            gameTurnSnapshot = new GameTurnSnapshot(turnDialogs, objects, session.Id, session.Turn + 1, session.IsPause, session.IsDebug);
+            var session = new GameSession(scenario);
+
+            gameTurnSnapshot = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects.ToImmutableList(), Guid.NewGuid().ToString(), session.Turn + 1, session.IsPause, session.IsDebug);
         }
 
         [Test]
-        public void GameTurnSnapshotBaseTest()
+        public void GameTurnSnapshotShouldBeCorrect()
         {
-            Assert.IsTrue(gameTurnSnapshot.Id == 0);
+            Assert.IsTrue(gameTurnSnapshot.Id != string.Empty);
             Assert.IsTrue(gameTurnSnapshot.IsDebug == false);
             Assert.IsTrue(gameTurnSnapshot.IsPause == true);
         }

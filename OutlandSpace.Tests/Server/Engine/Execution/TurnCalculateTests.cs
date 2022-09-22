@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Session;
+using OutlandSpace.Universe.Engine.Session;
 
 namespace OutlandSpace.Tests.Server.Engine.Execution
 {
@@ -8,28 +9,16 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
     public class TurnCalculateTests
     {
         [Test]
-        public void AfterExecuteTurnNumberShouldBeTurnPlusOne()
-        {
-            var turnExecuteSnapshot = TurnCalculate.Execute(new GameSession(), GlobalData.DialogsStorageWithTestData);
-
-            Assert.That(turnExecuteSnapshot.Turn == 1);
-        }
-
-        [Test]
         public void AfterExecuteTwoTurnsNumberShouldBeTurnPlusTwo()
         {
-            var session = new GameSession();
+            var session = GlobalData.GameSessionWithMainScenarioId;
 
-            var firstTurnExecuteSnapshot = TurnCalculate.Execute(session, GlobalData.DialogsStorageWithTestData);
-
-            session.UpdateTurn(firstTurnExecuteSnapshot.GetCelestialObjects(), 1);
+            var firstTurnExecuteSnapshot = session.TurnExecute();
 
             Assert.That(firstTurnExecuteSnapshot.Turn == 1);
             Assert.That(session.Turn == 1);
 
-            var secondTurnExecuteSnapshot = TurnCalculate.Execute(session, GlobalData.DialogsStorageWithTestData);
-
-            session.UpdateTurn(secondTurnExecuteSnapshot.GetCelestialObjects(), 1);
+            var secondTurnExecuteSnapshot = session.TurnExecute();
 
             Assert.That(secondTurnExecuteSnapshot.Turn == 2);
             Assert.That(session.Turn == 2);
@@ -38,12 +27,11 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
         [Test]
         public void AfterExecuteHundredTurnsNumberShouldBeTurnPlusHundred()
         {
-            var session = new GameSession();
+            var session = GlobalData.GameSessionWithMainScenarioId;
 
-            for(int i = 0; i< 1000; i++)
+            for (int i = 0; i< 1000; i++)
             {
-                var executeSnapshot = TurnCalculate.Execute(session, GlobalData.DialogsStorageWithTestData);
-                session.UpdateTurn(executeSnapshot.GetCelestialObjects(), 1);
+                session.TurnExecute();
             }
 
             Assert.That(session.Turn == 1000);
