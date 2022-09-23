@@ -51,15 +51,15 @@
     <Folder Include="Server\Engine\Session\" />
     <Folder Include="Server\Dialog\" />
     <Folder Include="Universe\Tools\" />
-    <Folder Include="TestsData\" />
     <Folder Include="TestsData\Dialogs\" />
     <Folder Include="Server\Engine\Execution\" />
-    <Folder Include="TestsData\Scenarios\" />
-    <Folder Include="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\" />
     <Folder Include="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\" />
     <Folder Include="Server\Engine\Execution\Calculation\" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="TestsData\Characters\BaseCharactersPack.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestsData\Dialogs\BaseDialogPack.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -67,6 +67,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\CelestialObjects.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Characters\BaseCharactersPack.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="TestsData\Scenarios\7045d54c-412b-429e-b1ed-43e62dcc10e6\Dialogs\Pack_01.json">

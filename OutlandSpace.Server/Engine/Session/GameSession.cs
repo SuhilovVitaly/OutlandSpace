@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using log4net;
 using System.Collections.Immutable;
+using OutlandSpace.Server.Engine.Characters;
 using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Execution.Calculation;
@@ -46,7 +47,7 @@ namespace OutlandSpace.Server.Engine.Session
         {
             Turn = turn;
 
-            Initialization(objects, dialogs, null);
+            Initialization(objects, dialogs, null, null);
         }
 
         public GameSession(IScenario scenario) : this(scenario.CelestialObjects, null)
@@ -55,10 +56,12 @@ namespace OutlandSpace.Server.Engine.Session
 
             var turnDialogs = DialogsCalculation.Execute(storage, 0);
 
-            Initialization(scenario.CelestialObjects, turnDialogs, storage);
+            var charactersStorage = new CharactersFactory().Initialize(scenario.RootFolder, scenario.Id);
+
+            Initialization(scenario.CelestialObjects, turnDialogs, storage, charactersStorage);
         }
 
-        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, IDialogsStorage storage)
+        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, IDialogsStorage storage, ICharactersStorage charactersStorage)
         {
             Logger.Info("Start new game session.");
 

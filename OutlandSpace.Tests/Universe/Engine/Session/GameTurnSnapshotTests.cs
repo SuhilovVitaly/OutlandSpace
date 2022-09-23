@@ -14,7 +14,7 @@ namespace OutlandSpace.Tests.Universe.Engine.Session
         [SetUp]
         public void SetUp()
         {
-            IScenario scenario = new Scenario(GlobalData.MainScenarioId, GlobalData.DialogsStorageWithTestData);
+            IScenario scenario = new Scenario(GlobalData.MainScenarioId, "TestsData");
 
             var session = new GameSession(scenario);
 

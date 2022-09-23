@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using OutlandSpace.Server.Engine.Characters;
 using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
+using OutlandSpace.Universe.Entities.Characters;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -20,13 +21,15 @@ namespace OutlandSpace.Server.Engine.Session
 
         public List<IDialog> Dialogs { get; private set; }
 
-        private string ScenarioRootFolder { get; }
+        public List<ICharacter> Characters { get; private set; }
+
+        public string RootFolder { get; private set; }
 
         public Scenario(string id, string scenarioRootFolder = "Data")
         {
             Id = id;
 
-            ScenarioRootFolder = scenarioRootFolder;
+            RootFolder = scenarioRootFolder;
 
             Initialization();
         }
@@ -35,18 +38,18 @@ namespace OutlandSpace.Server.Engine.Session
         {
             Id = id;
 
-            ScenarioRootFolder = scenarioRootFolder;
+            RootFolder = scenarioRootFolder;
 
             Initialization();
 
             Dialogs.AddRange(dialogsStorage.Dialogs);
         }
-       
 
         private void Initialization()
         {
             CelestialObjects = LoadCelestialObjects(Id);
             Dialogs = LoadDialogs(Id);
+            Characters = LoadCharacters(Id, RootFolder);
         }
 
         private List<ICelestialObject> LoadCelestialObjects(string scenarioFolderName)
@@ -61,8 +64,7 @@ namespace OutlandSpace.Server.Engine.Session
             var jsonManual = JsonConvert.SerializeObject(resultCollection);
             */
 
-
-            var rootPath = Path.Combine(Environment.CurrentDirectory, ScenarioRootFolder, "Scenarios", scenarioFolderName, "CelestialObjects.json");
+            var rootPath = Path.Combine(Environment.CurrentDirectory, RootFolder, "Scenarios", scenarioFolderName, "CelestialObjects.json");
 
             var baseCelestialObjects = JsonConvert.DeserializeObject<List<BaseCelestialObject>>(File.ReadAllText(rootPath));
 
@@ -73,9 +75,16 @@ namespace OutlandSpace.Server.Engine.Session
 
         private List<IDialog> LoadDialogs(string scenarioFolderName)
         {
-            var rootPath = Path.Combine(ScenarioRootFolder, "Scenarios", scenarioFolderName);
+            var rootPath = Path.Combine(RootFolder, "Scenarios", scenarioFolderName);
 
             return new DialogFactory().Initialize(rootPath).Dialogs;
+        }
+
+        private List<ICharacter> LoadCharacters(string scenarioFolderName, string rootGameFolder)
+        {
+            var charactersFactory = new CharactersFactory().Initialize(rootGameFolder, scenarioFolderName);
+
+            return charactersFactory.Characters;
         }
     }
 }
