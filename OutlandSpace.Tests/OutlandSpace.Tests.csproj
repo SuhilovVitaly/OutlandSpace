@@ -47,8 +47,6 @@
   <ItemGroup>
     <Folder Include="Universe\Engine\" />
     <Folder Include="Universe\Engine\Session\" />
-    <Folder Include="Server\Engine\" />
-    <Folder Include="Server\Engine\Session\" />
     <Folder Include="Server\Dialog\" />
     <Folder Include="Universe\Tools\" />
     <Folder Include="TestsData\Dialogs\" />

@@ -12,17 +12,19 @@ namespace OutlandSpace.Tests
 
         public static int DialogsCount { get; set; } = 1;
 
+        public static string TestsDataFolder { get; set; } = "TestsData";
+
         public static string MainScenarioId { get; } = "7045d54c-412b-429e-b1ed-43e62dcc10e6";
 
-        private static readonly Lazy<LocalServer> LocalServer = new Lazy<LocalServer>(() => new LocalServer("TestsData"));
+        private static readonly Lazy<LocalServer> LocalServer = new Lazy<LocalServer>(() => new LocalServer(TestsDataFolder));
 
-        private static readonly DialogsStorage Storage = new DialogFactory().Initialize("TestsData");
+        private static readonly DialogsStorage Storage = new DialogFactory().Initialize(TestsDataFolder);
 
         public static IGameSession GameSessionWithMainScenarioId
         {
             get
             {
-                return new GameSession(new Scenario(MainScenarioId, DialogsStorageWithTestData));
+                return new GameSession(new Scenario(MainScenarioId, TestsDataFolder));
             }
             
         }

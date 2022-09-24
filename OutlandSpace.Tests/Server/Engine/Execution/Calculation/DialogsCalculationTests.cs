@@ -12,13 +12,16 @@ namespace OutlandSpace.Tests.Server.Engine.Execution.Calculation
         [SetUp]
         public void SetUp()
         {
-            gameSession = GlobalData.GameSessionWithMainScenarioId;
+            //var server = GlobalData.LocalServerWithTestData;
+            gameSession = GlobalData.GameSessionWithMainScenarioId; 
 
         }
 
         [Test]
         public void BaseDialogsCalculationShouldBeCorrect()
         {
+            //var session = LocalServerWithTestData
+
             var dialog = DialogsCalculation.Execute(gameSession.Storage, 1);
 
             Assert.AreEqual(3, dialog.Dialogs.Count);

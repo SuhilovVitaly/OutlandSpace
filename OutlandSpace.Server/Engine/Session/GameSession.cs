@@ -24,50 +24,42 @@ namespace OutlandSpace.Server.Engine.Session
         public IExecuteMetrics Metrics { get; } = new ExecuteMetrics();
         public ITurnDialogs Dialogs { get; private set; }
 
+        public IResourcesStorage ResourcesStorage { get; }
+
         public int Id { get; set; }
-        private string lastSnapshotId;
+        private string _lastSnapshotId;
 
         public int Turn { get; private set; }
 
-        private const double granularityAtomic = 0.1;
-        private const double granularityTurn = 1.0;
+        private const double GranularityAtomic = 0.1;
+        private const double GranularityTurn = 1.0;
 
         public IGameTurnSnapshot ToGameTurnSnapshot()
         {
             return new GameTurnSnapshot(
                 Dialogs,
                 CelestialObjects.ToImmutableList(),
-                lastSnapshotId,
+                _lastSnapshotId,
                 Turn,
                 IsPause,
                 IsDebug);
         }
 
-        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs, int turn = 0) 
+        public GameSession(IScenario scenario, int turn = 0)
         {
+            ResourcesStorage = new ResourcesStorage(new Resources(scenario.CelestialObjects, scenario.Dialogs, scenario.Characters));
+
+            //var storage = new DialogsStorage(scenario.Dialogs);
+
             Turn = turn;
 
-            Initialization(objects, dialogs, null, null);
-        }
+            var turnDialogs = DialogsCalculation.Execute(ResourcesStorage.Dialogs, Turn);
 
-        public GameSession(IScenario scenario) : this(scenario.CelestialObjects, null)
-        {
-            var storage = new DialogsStorage(scenario.Dialogs);
-
-            var turnDialogs = DialogsCalculation.Execute(storage, 0);
-
-            var charactersStorage = new CharactersFactory().Initialize(scenario.RootFolder, scenario.Id);
-
-            Initialization(scenario.CelestialObjects, turnDialogs, storage, charactersStorage);
-        }
-
-        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, IDialogsStorage storage, ICharactersStorage charactersStorage)
-        {
             Logger.Info("Start new game session.");
 
-            CelestialObjects = objects;
-            Dialogs = dialogs;
-            Storage = storage;
+            CelestialObjects = scenario.CelestialObjects;
+            Dialogs = turnDialogs;
+            Storage = ResourcesStorage.Dialogs;
 
             Status.Pause();
         }
@@ -78,23 +70,23 @@ namespace OutlandSpace.Server.Engine.Session
             if (millisecondAfterLastTurnExecution < 1000)
             {
                 // Recalculate celestial objects positions 10 times per second
-                CelestialObjects = LocationsExecute(granularityAtomic);
+                CelestialObjects = LocationsExecute(GranularityAtomic);
                 return ToGameTurnSnapshot();
             }
 
             // Recalculate all turn calculation 1 times per second
 
-            return TurnExecute(granularityAtomic, Stopwatch.StartNew());
+            return TurnExecute(GranularityAtomic, Stopwatch.StartNew());
         }
 
         public IGameTurnSnapshot TurnExecute()
         {
-            return TurnExecute(granularityTurn, Stopwatch.StartNew());
+            return TurnExecute(GranularityTurn, Stopwatch.StartNew());
         }
 
         private IGameTurnSnapshot TurnExecute(double granularity, Stopwatch stopwatch)
         {
-            lastSnapshotId = Guid.NewGuid().ToString();
+            _lastSnapshotId = Guid.NewGuid().ToString();
 
             CelestialObjects = LocationsExecute(granularity);
 

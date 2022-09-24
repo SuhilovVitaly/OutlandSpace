@@ -13,6 +13,13 @@ namespace OutlandSpace.Universe.Tools
         {
             var resultCollection = new List<string>();
 
+            var rootScenarioPath = Path.Combine(rootFolder);
+
+            if (!Directory.Exists(rootScenarioPath))
+            {
+                return new List<string>();
+            }
+
             var tasks = GetFilesContentFromDirectoryAsync(rootFolder, fileExtention);
 
             foreach (var fileContent in tasks.GetAwaiter().GetResult())

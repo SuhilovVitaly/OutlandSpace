@@ -12,29 +12,24 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         [Test]
         public void InitializationShouldLoadCelestialObjectsCorrectForTestData()
         {
-            var expectedCelestialObjects = 2;
-            var expectedDialogs = 2;
-            //var guid = Guid.NewGuid().ToString();
-            var scenarioId = "7045d54c-412b-429e-b1ed-43e62dcc10e6";
+            const int expectedCelestialObjects = 2;
+            const int expectedGameDialogs = 5;
+            const int expectedScenarioDialogs = 2;
 
-
-            IScenario scenario = new Scenario(scenarioId, "TestsData");
+            IScenario scenario = new Scenario(GlobalData.MainScenarioId, GlobalData.TestsDataFolder);
 
             Assert.AreEqual(expectedCelestialObjects, scenario.CelestialObjects.Count);
-            Assert.AreEqual(expectedDialogs, scenario.Dialogs.Count);
+            Assert.AreEqual(expectedGameDialogs + expectedScenarioDialogs, scenario.Dialogs.Count);
 
         }
 
         [Test]
         public void InitializationShouldLoadCelestialObjectsCorrectForGameData()
         {
-            var expectedCelestialObjects = 2;
-            var expectedDialogs = 2;
+            const int expectedCelestialObjects = 2;
+            const int expectedDialogs = 3;
 
-            var scenarioId = "7045d54c-412b-429e-b1ed-43e62dcc10e6";
-
-
-            IScenario scenario = new Scenario(scenarioId);
+            IScenario scenario = new Scenario(GlobalData.MainScenarioId);
 
             Assert.AreEqual(expectedCelestialObjects, scenario.CelestialObjects.Count);
             Assert.AreEqual(expectedDialogs, scenario.Dialogs.Count);
@@ -48,14 +43,9 @@ namespace OutlandSpace.Tests.Server.Engine.Session
             var expectedScenarioDialogs = 2;
             var expectedGeneralDialogs = 5;
 
-
             var scenarioId = "7045d54c-412b-429e-b1ed-43e62dcc10e6";
 
-            var dialogFactory = new DialogFactory();
-
-            var storage = dialogFactory.Initialize("TestsData");
-
-            IScenario scenario = new Scenario(scenarioId, storage);
+            IScenario scenario = new Scenario(scenarioId, GlobalData.TestsDataFolder);
 
             Assert.AreEqual(expectedCelestialObjects, scenario.CelestialObjects.Count);
             Assert.AreEqual(expectedScenarioDialogs + expectedGeneralDialogs, scenario.Dialogs.Count);

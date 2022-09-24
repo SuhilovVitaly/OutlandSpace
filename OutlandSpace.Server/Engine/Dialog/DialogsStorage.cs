@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using log4net;
 using OutlandSpace.Universe.Engine.Dialogs;
@@ -9,7 +10,7 @@ namespace OutlandSpace.Server.Engine.Dialog
     [Serializable]
     public class DialogsStorage: IDialogsStorage
     {
-        private static readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
         public List<IDialog> Dialogs { get; }  
 
         public DialogsStorage(List<IDialog> dialogs)
@@ -19,12 +20,7 @@ namespace OutlandSpace.Server.Engine.Dialog
 
         public IDialog GetDialog(string guid)
         {
-            foreach (var dialog in Dialogs)
-            {
-                if (dialog.Id.ToString() == guid) return dialog;
-            }
-
-            return null;
+            return Dialogs.FirstOrDefault(dialog => dialog.Id == guid);
         }
 
         public List<IDialog> GetDialogChain(string rootDialogId)
@@ -51,7 +47,7 @@ namespace OutlandSpace.Server.Engine.Dialog
 
                 if (dialog is null)
                 {
-                    _logger.Error($"Exit '{exit}' from dialog '{rootDialogId}' not found.");
+                    Logger.Error($"Exit '{exit}' from dialog '{rootDialogId}' not found.");
                 }
                 else
                 {

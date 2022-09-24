@@ -26,7 +26,8 @@ namespace OutlandSpace.Tests
 
             worker.StartNewGameSession(GlobalData.MainScenarioId, 0);
 
-            Thread.Sleep(1000);
+
+            Thread.Sleep(1500);
 
             var snapshot = worker.GetSnapshot();
 
