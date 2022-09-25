@@ -14,9 +14,6 @@
     <None Remove="System.Collections.Immutable" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\Dialogs\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
   </ItemGroup>

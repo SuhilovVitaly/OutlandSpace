@@ -6,14 +6,14 @@ namespace OutlandSpace.Universe.Engine.Session
 {
     public class GameTurnSnapshot : IGameTurnSnapshot
     {
-        public GameTurnSnapshot(ITurnDialogs dialogs, ImmutableList<ICelestialObject> objects, string id, int turn, bool isPause, bool isDebug)
+        public GameTurnSnapshot(ITurnInteraction interaction, ImmutableList<ICelestialObject> objects, string id, int turn, bool isPause, bool isDebug)
         {
             Id = id;
             Turn = turn;
             IsPause = isPause;
             IsDebug = isDebug;
             celestialObjects = objects;
-            Dialogs = dialogs;
+            Interaction = interaction;
         }
 
         public string Id { get; set; }
@@ -21,7 +21,7 @@ namespace OutlandSpace.Universe.Engine.Session
         public bool IsPause { get; set; }
         public bool IsDebug { get; set; }
 
-        public ITurnDialogs Dialogs { get; set; }
+        public ITurnInteraction Interaction { get; set; }
 
         private ImmutableList<ICelestialObject> celestialObjects;
 

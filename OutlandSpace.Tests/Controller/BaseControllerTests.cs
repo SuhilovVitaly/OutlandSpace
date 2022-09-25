@@ -26,13 +26,14 @@ namespace OutlandSpace.Tests
 
             worker.StartNewGameSession(GlobalData.MainScenarioId, 0);
 
-            Thread.Sleep(1000);
+
+            Thread.Sleep(1500);
 
             var snapshot = worker.GetSnapshot();
 
             Assert.AreEqual(2, snapshot.GetCelestialObjects().Count);
-            Assert.AreEqual(1, snapshot.Dialogs.Dialogs.Count);
-            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Dialogs.RootDialog.Id);
+            Assert.AreEqual(1, snapshot.Interaction.Dialogs.Count);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Interaction.RootDialog.Id);
 
             Assert.False(worker.IsRunning());
         }
@@ -49,8 +50,8 @@ namespace OutlandSpace.Tests
             var snapshot = worker.GetSnapshot();
 
             Assert.AreEqual(2, snapshot.GetCelestialObjects().Count);
-            Assert.AreEqual(1, snapshot.Dialogs.Dialogs.Count);
-            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Dialogs.RootDialog.Id);
+            Assert.AreEqual(1, snapshot.Interaction.Dialogs.Count);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Interaction.RootDialog.Id);
 
             Assert.False(worker.IsRunning());
 

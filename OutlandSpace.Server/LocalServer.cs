@@ -41,7 +41,7 @@ namespace OutlandSpace.Server
 
             Metrics = new ServerMetrics();
 
-            IScenario scenario = new Scenario(scenarioId, dialogsStorage, source);
+            IScenario scenario = new Scenario(scenarioId, source);
 
             session = new GameSession(scenario);
 

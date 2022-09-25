@@ -17,7 +17,7 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         [SetUp]
         public void SetUp()
         {
-            IScenario scenario = new Scenario(GlobalData.MainScenarioId, GlobalData.DialogsStorageWithTestData);
+            IScenario scenario = new Scenario(GlobalData.MainScenarioId, GlobalData.TestsDataFolder);
 
             gameSession = new GameSession(scenario);
 
@@ -28,8 +28,8 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         {
             var result = gameSession.TurnExecute();
 
-            Assert.AreEqual(1, result.Dialogs.Dialogs.Count);
-            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", result.Dialogs.RootDialog.Id);
+            Assert.AreEqual(1, result.Interaction.Dialogs.Count);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", result.Interaction.RootDialog.Id);
             Assert.AreEqual(2, result.GetCelestialObjects().Count);
             Assert.AreEqual(1, result.Turn);
             Assert.AreEqual(true, result.IsPause);
@@ -55,7 +55,7 @@ namespace OutlandSpace.Tests.Server.Engine.Session
             var snapshot = GlobalData.LocalServerWithTestData.Initialization(GlobalData.MainScenarioId);
 
             Assert.AreEqual(expectedCelestialObjects, snapshot.GetCelestialObjects().Count);
-            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Dialogs.RootDialog.Id);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Interaction.RootDialog.Id);
 
             Assert.AreEqual(gameSession.CelestialObjects.Count, 2);
         }
@@ -69,27 +69,20 @@ namespace OutlandSpace.Tests.Server.Engine.Session
                 new Asteroid("101", 90.0, 10.0, new Point(100.0f, 100.0f), "Asteroid II")
             };
 
-            var exit = new DialogExit("201", "Exit 201", "");
-            var exits = new List<DialogExit>
-            {
-                exit
-            };
-
             var dialogs = new List<IDialog>
             {
-                new CommonDialog("202", 1, "window_close", exits),
-                new CommonDialog("203", 1, "window_close", exits)
+                new CommonDialog("200", 1, "window_close", new List<DialogExit>{new DialogExit("a2", "Exit 202", "202")}),
+                new CommonDialog("202", 1, "window_close", new List<DialogExit>{new DialogExit("a3", "Exit 203", "203")}),
+                new CommonDialog("203", 1, "window_close", new List<DialogExit>())
             };
 
-            var turnDialogs = new TurnDialogs(new CommonDialog("200", 1, "window_close", exits), dialogs);
-
-            var session = new GameSession(celestialObjects, turnDialogs);
+            var session = new GameSession(new Scenario("MockScenarioId", new Resources(celestialObjects, dialogs, null)), 1);
 
             var result = session.ToGameTurnSnapshot();
 
-            Assert.AreEqual(2, result.Dialogs.Dialogs.Count);
+            Assert.AreEqual(2, result.Interaction.Dialogs.Count);
             Assert.AreEqual(2, result.GetCelestialObjects().Count);
-            Assert.AreEqual(0, result.Turn);
+            Assert.AreEqual(1, result.Turn);
         }
     }
 }

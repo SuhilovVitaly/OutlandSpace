@@ -9,24 +9,24 @@ namespace OutlandSpace.Tests.Universe.Engine.Session
     [TestFixture]
     public class GameTurnSnapshotTests
     {
-        IGameTurnSnapshot gameTurnSnapshot;
+        IGameTurnSnapshot _gameTurnSnapshot;
 
         [SetUp]
         public void SetUp()
         {
-            IScenario scenario = new Scenario(GlobalData.MainScenarioId, GlobalData.DialogsStorageWithTestData);
+            IScenario scenario = new Scenario(GlobalData.MainScenarioId, "TestsData");
 
             var session = new GameSession(scenario);
 
-            gameTurnSnapshot = new GameTurnSnapshot(session.Dialogs, session.CelestialObjects.ToImmutableList(), Guid.NewGuid().ToString(), session.Turn + 1, session.IsPause, session.IsDebug);
+            _gameTurnSnapshot = new GameTurnSnapshot(session.Interaction, session.CelestialObjects.ToImmutableList(), Guid.NewGuid().ToString(), session.Turn + 1, session.IsPause, session.IsDebug);
         }
 
         [Test]
         public void GameTurnSnapshotShouldBeCorrect()
         {
-            Assert.IsTrue(gameTurnSnapshot.Id != string.Empty);
-            Assert.IsTrue(gameTurnSnapshot.IsDebug == false);
-            Assert.IsTrue(gameTurnSnapshot.IsPause == true);
+            Assert.IsTrue(_gameTurnSnapshot.Id != string.Empty);
+            Assert.IsTrue(_gameTurnSnapshot.IsDebug == false);
+            Assert.IsTrue(_gameTurnSnapshot.IsPause == true);
         }
     }
 }

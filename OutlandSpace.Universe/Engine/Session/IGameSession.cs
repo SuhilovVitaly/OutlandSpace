@@ -16,7 +16,7 @@ namespace OutlandSpace.Universe.Engine.Session
         IGameTurnSnapshot ToGameTurnSnapshot();
         IGameTurnSnapshot TurnExecute();
         IGameTurnSnapshot RealTimeTurnExecute();
-        ITurnDialogs Dialogs { get; }
+        ITurnInteraction Interaction { get; }
         IDialogsStorage Storage { get; }
         IExecuteMetrics Metrics { get; }
     }

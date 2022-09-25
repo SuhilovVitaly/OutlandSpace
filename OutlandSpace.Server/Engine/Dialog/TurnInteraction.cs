@@ -5,9 +5,9 @@ using OutlandSpace.Universe.Engine.Dialogs;
 namespace OutlandSpace.Server.Engine.Dialog
 {
     [Serializable]
-    public class TurnDialogs: ITurnDialogs
+    public class TurnInteraction: ITurnInteraction
     {
-        public TurnDialogs(IDialog rootDialog, List<IDialog> dialogs)
+        public TurnInteraction(IDialog rootDialog, List<IDialog> dialogs)
         {
             RootDialog = rootDialog;
             Dialogs = dialogs;

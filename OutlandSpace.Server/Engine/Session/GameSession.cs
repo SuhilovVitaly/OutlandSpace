@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using log4net;
-using System.Collections.Immutable;
-using OutlandSpace.Server.Engine.Dialog;
+﻿using log4net;
 using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -21,50 +20,44 @@ namespace OutlandSpace.Server.Engine.Session
         public IDialogsStorage Storage { get; private set; }
         public List<ICelestialObject> CelestialObjects { get; private set; }
         public IExecuteMetrics Metrics { get; } = new ExecuteMetrics();
-        public ITurnDialogs Dialogs { get; private set; }
+        public ITurnInteraction Interaction { get; private set; }
+
+        public IResourcesStorage ResourcesStorage { get; }
 
         public int Id { get; set; }
-        private string lastSnapshotId;
+        private string _lastSnapshotId;
 
         public int Turn { get; private set; }
 
-        private const double granularityAtomic = 0.1;
-        private const double granularityTurn = 1.0;
+        private const double GranularityAtomic = 0.1;
+        private const double GranularityTurn = 1.0;
 
         public IGameTurnSnapshot ToGameTurnSnapshot()
         {
             return new GameTurnSnapshot(
-                Dialogs,
+                Interaction,
                 CelestialObjects.ToImmutableList(),
-                lastSnapshotId,
+                _lastSnapshotId,
                 Turn,
                 IsPause,
                 IsDebug);
         }
 
-        public GameSession(List<ICelestialObject> objects, ITurnDialogs dialogs, int turn = 0) 
+        public GameSession(IScenario scenario, int turn = 0)
         {
+            ResourcesStorage = new ResourcesStorage(new Resources(scenario.CelestialObjects, scenario.Dialogs, scenario.Characters));
+
+            //var storage = new DialogsStorage(scenario.Dialogs);
+
             Turn = turn;
 
-            Initialization(objects, dialogs, null);
-        }
+            var turnDialogs = DialogsCalculation.Execute(ResourcesStorage.Dialogs, Turn);
 
-        public GameSession(IScenario scenario) : this(scenario.CelestialObjects, null)
-        {
-            var storage = new DialogsStorage(scenario.Dialogs);
-
-            var turnDialogs = DialogsCalculation.Execute(storage, 0);
-
-            Initialization(scenario.CelestialObjects, turnDialogs, storage);
-        }
-
-        private void Initialization(List<ICelestialObject> objects, ITurnDialogs dialogs, IDialogsStorage storage)
-        {
             Logger.Info("Start new game session.");
 
-            CelestialObjects = objects;
-            Dialogs = dialogs;
-            Storage = storage;
+            CelestialObjects = scenario.CelestialObjects;
+            Interaction = turnDialogs;
+            Storage = ResourcesStorage.Dialogs;
 
             Status.Pause();
         }
@@ -75,27 +68,27 @@ namespace OutlandSpace.Server.Engine.Session
             if (millisecondAfterLastTurnExecution < 1000)
             {
                 // Recalculate celestial objects positions 10 times per second
-                CelestialObjects = LocationsExecute(granularityAtomic);
+                CelestialObjects = LocationsExecute(GranularityAtomic);
                 return ToGameTurnSnapshot();
             }
 
             // Recalculate all turn calculation 1 times per second
 
-            return TurnExecute(granularityAtomic, Stopwatch.StartNew());
+            return TurnExecute(GranularityAtomic, Stopwatch.StartNew());
         }
 
         public IGameTurnSnapshot TurnExecute()
         {
-            return TurnExecute(granularityTurn, Stopwatch.StartNew());
+            return TurnExecute(GranularityTurn, Stopwatch.StartNew());
         }
 
         private IGameTurnSnapshot TurnExecute(double granularity, Stopwatch stopwatch)
         {
-            lastSnapshotId = Guid.NewGuid().ToString();
+            _lastSnapshotId = Guid.NewGuid().ToString();
 
             CelestialObjects = LocationsExecute(granularity);
 
-            Dialogs = DialogsExecute();
+            Interaction = DialogsExecute();
 
             EndTurnAndMetricsUpdate(stopwatch.Elapsed.TotalMilliseconds);
 
@@ -110,7 +103,7 @@ namespace OutlandSpace.Server.Engine.Session
             return celestialObjects;
         }
 
-        private ITurnDialogs DialogsExecute()
+        private ITurnInteraction DialogsExecute()
         {
             var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage);
 

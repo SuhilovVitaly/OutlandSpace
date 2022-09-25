@@ -1,0 +1,18 @@
+﻿[
+  {
+    "Id": "character-Vita-Sushilov-8fd7-af3cc0b1f914",
+    "FirstName": "Vita",
+    "LastName": "Sushilov",
+    "Gender": "Female",
+    "LocationCelestialObjectId": "Glowworm",
+    "Portrait": "Vita-Sushilov"
+  },
+  {
+    "Id": "character-Duncan-Sushilov-8fd7-af3cc0b1f914",
+    "FirstName": "Duncan",
+    "LastName": "Sushilov",
+    "Gender": "Male",
+    "LocationCelestialObjectId": "Glowworm",
+    "Portrait": "Duncan-Sushilov"
+  }
+]

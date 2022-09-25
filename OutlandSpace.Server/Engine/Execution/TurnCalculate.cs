@@ -8,7 +8,7 @@ namespace OutlandSpace.Server.Engine.Execution
 {
     public class TurnCalculate
     {
-        public static ITurnDialogs GetCurrentTurnDialogs(int turn, IDialogsStorage storage)
+        public static ITurnInteraction GetCurrentTurnDialogs(int turn, IDialogsStorage storage)
         {
             return DialogsCalculation.Execute(storage, turn);
         }
