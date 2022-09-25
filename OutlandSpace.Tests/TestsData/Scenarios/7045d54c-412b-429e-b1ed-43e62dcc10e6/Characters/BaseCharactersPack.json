@@ -4,6 +4,7 @@
     "FirstName": "Dana",
     "LastName": "Sushilov",
     "Gender": "Female",
-    "LocationCelestialObjectId": "Glowworm"
+    "LocationCelestialObjectId": "Glowworm",
+    "Portrait": "Dana-Sushilov"
   }
 ]

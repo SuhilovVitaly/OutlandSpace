@@ -9,14 +9,10 @@ namespace OutlandSpace.Server.Engine.Session
         public IDialogsStorage Dialogs { get; }
         public ICharactersStorage Characters { get; }
 
-        private Resources _resources;
-
         public ResourcesStorage(Resources resources)
         {
-            _resources = resources;
-
-            Dialogs = new DialogsStorage(_resources.Dialogs);
-            Characters = new CharactersStorage(_resources.Characters, null);
+            Dialogs = new DialogsStorage(resources.Dialogs);
+            Characters = new CharactersStorage(resources.Characters, null);
         }
     }
 }

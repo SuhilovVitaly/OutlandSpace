@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using log4net;
-using System.Collections.Immutable;
-using OutlandSpace.Server.Engine.Characters;
-using OutlandSpace.Server.Engine.Dialog;
+﻿using log4net;
 using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Entities.CelestialObjects;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -22,7 +20,7 @@ namespace OutlandSpace.Server.Engine.Session
         public IDialogsStorage Storage { get; private set; }
         public List<ICelestialObject> CelestialObjects { get; private set; }
         public IExecuteMetrics Metrics { get; } = new ExecuteMetrics();
-        public ITurnDialogs Dialogs { get; private set; }
+        public ITurnInteraction Interaction { get; private set; }
 
         public IResourcesStorage ResourcesStorage { get; }
 
@@ -37,7 +35,7 @@ namespace OutlandSpace.Server.Engine.Session
         public IGameTurnSnapshot ToGameTurnSnapshot()
         {
             return new GameTurnSnapshot(
-                Dialogs,
+                Interaction,
                 CelestialObjects.ToImmutableList(),
                 _lastSnapshotId,
                 Turn,
@@ -58,7 +56,7 @@ namespace OutlandSpace.Server.Engine.Session
             Logger.Info("Start new game session.");
 
             CelestialObjects = scenario.CelestialObjects;
-            Dialogs = turnDialogs;
+            Interaction = turnDialogs;
             Storage = ResourcesStorage.Dialogs;
 
             Status.Pause();
@@ -90,7 +88,7 @@ namespace OutlandSpace.Server.Engine.Session
 
             CelestialObjects = LocationsExecute(granularity);
 
-            Dialogs = DialogsExecute();
+            Interaction = DialogsExecute();
 
             EndTurnAndMetricsUpdate(stopwatch.Elapsed.TotalMilliseconds);
 
@@ -105,7 +103,7 @@ namespace OutlandSpace.Server.Engine.Session
             return celestialObjects;
         }
 
-        private ITurnDialogs DialogsExecute()
+        private ITurnInteraction DialogsExecute()
         {
             var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage);
 

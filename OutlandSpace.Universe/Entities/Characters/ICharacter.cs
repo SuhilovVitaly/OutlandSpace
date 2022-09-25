@@ -11,5 +11,7 @@
         public Gender Gender { get; }
 
         public string LocationCelestialObjectId { get; }
+
+        public string Portrait { get; }
     }
 }

@@ -28,8 +28,8 @@ namespace OutlandSpace.Tests.Server.Engine.Session
         {
             var result = gameSession.TurnExecute();
 
-            Assert.AreEqual(1, result.Dialogs.Dialogs.Count);
-            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", result.Dialogs.RootDialog.Id);
+            Assert.AreEqual(1, result.Interaction.Dialogs.Count);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", result.Interaction.RootDialog.Id);
             Assert.AreEqual(2, result.GetCelestialObjects().Count);
             Assert.AreEqual(1, result.Turn);
             Assert.AreEqual(true, result.IsPause);
@@ -55,7 +55,7 @@ namespace OutlandSpace.Tests.Server.Engine.Session
             var snapshot = GlobalData.LocalServerWithTestData.Initialization(GlobalData.MainScenarioId);
 
             Assert.AreEqual(expectedCelestialObjects, snapshot.GetCelestialObjects().Count);
-            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Dialogs.RootDialog.Id);
+            Assert.AreEqual("x90adc8a-eca5-4c84-b4a1-682098bb4829", snapshot.Interaction.RootDialog.Id);
 
             Assert.AreEqual(gameSession.CelestialObjects.Count, 2);
         }
@@ -80,7 +80,7 @@ namespace OutlandSpace.Tests.Server.Engine.Session
 
             var result = session.ToGameTurnSnapshot();
 
-            Assert.AreEqual(2, result.Dialogs.Dialogs.Count);
+            Assert.AreEqual(2, result.Interaction.Dialogs.Count);
             Assert.AreEqual(2, result.GetCelestialObjects().Count);
             Assert.AreEqual(1, result.Turn);
         }

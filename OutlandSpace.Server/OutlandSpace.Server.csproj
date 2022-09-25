@@ -25,7 +25,6 @@
     <None Remove="System.Collections.Immutable" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\Dialog\" />
     <Folder Include="Data\" />
     <Folder Include="Data\Dialogs\" />
     <Folder Include="Engine\Execution\" />
@@ -35,6 +34,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="RandomNameGeneratorLibrary" Version="1.2.2" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>

@@ -15,12 +15,15 @@ namespace OutlandSpace.Universe.Entities.Characters
 
         public string LocationCelestialObjectId { get; private set; }
 
-        public CrewMember(string id, string firstName, string lastName, Gender gender, string locationCelestialObjectId)
+        public string Portrait { get; private set; }
+
+        public CrewMember(string id, string firstName, string lastName, Gender gender, string locationCelestialObjectId, string portrait)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             Gender = gender;
+            Portrait = portrait;
 
             LocationCelestialObjectId = locationCelestialObjectId;
         }

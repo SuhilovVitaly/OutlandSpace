@@ -8,5 +8,6 @@ namespace OutlandSpace.Server.Engine.Characters
         List<ICharacter> Characters { get; }
         CharactersMetrics Metrics { get; set; }
         ICharacter GetCharacter(string characterId);
+        ICharacter GenerateRandomCrewMember(string celestialObjectId = "");
     }
 }

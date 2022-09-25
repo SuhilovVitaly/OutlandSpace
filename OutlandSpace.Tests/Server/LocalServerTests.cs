@@ -105,16 +105,17 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void ResumedGameSessionOnServerShouldBeComputeTicks()
         {
-            var server = new LocalServer("TestsData");
-            server.Initialization(GlobalData.MainScenarioId);
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);
 
             Thread.Sleep(1000);
 
-            server.ResumeSession();
+            localServer.ResumeSession();
 
             Thread.Sleep(5000);
 
-            var sessionMetrics = server.SessionMetrics();
+            var sessionMetrics = localServer.SessionMetrics();
 
             Assert.IsTrue(sessionMetrics.TurnCounter == 5);
         }

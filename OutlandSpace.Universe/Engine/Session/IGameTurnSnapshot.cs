@@ -14,7 +14,7 @@ namespace OutlandSpace.Universe.Engine.Session
 
         bool IsDebug { get; set; }
 
-        ITurnDialogs Dialogs { get; set; }
+        ITurnInteraction Interaction { get; set; }
 
         ImmutableList<ICelestialObject> GetCelestialObjects();
     }
