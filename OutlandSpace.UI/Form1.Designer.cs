@@ -143,6 +143,7 @@
             this.cmdStartNewGame.TabIndex = 1;
             this.cmdStartNewGame.Text = "Start new game";
             this.cmdStartNewGame.UseVisualStyleBackColor = false;
+            this.cmdStartNewGame.Click += new System.EventHandler(this.cmdStartNewGame_Click);
             // 
             // button2
             // 

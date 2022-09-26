@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Serialization.Json;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -24,7 +25,7 @@ namespace OutlandSpace.Server.Engine.Session
 
         public IResourcesStorage ResourcesStorage { get; }
 
-        public int Id { get; set; }
+        public int Id { get; set; } // TODO: Refactor it to string Id with scenario
         private string _lastSnapshotId;
 
         public int Turn { get; private set; }
@@ -46,8 +47,6 @@ namespace OutlandSpace.Server.Engine.Session
         public GameSession(IScenario scenario, int turn = 0)
         {
             ResourcesStorage = new ResourcesStorage(new Resources(scenario.CelestialObjects, scenario.Dialogs, scenario.Characters));
-
-            //var storage = new DialogsStorage(scenario.Dialogs);
 
             Turn = turn;
 

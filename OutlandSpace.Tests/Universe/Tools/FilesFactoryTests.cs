@@ -14,6 +14,14 @@ namespace OutlandSpace.Tests.Universe.Tools
         }
 
         [Test]
+        public void NumberOfFilesFactoryFromGameFolderShouldBeCorrect()
+        {
+            var files = OutlandSpace.Universe.Tools.FilesFactory.GetFilesContentFromDirectory("Data");
+
+            Assert.AreEqual(7, files.Count);
+        }
+
+        [Test]
         public void FilesFactorySubfoldersTest()
         {
             var files = OutlandSpace.Universe.Tools.FilesFactory.GetFilesContentFromDirectory("TestsData/Dialogs");

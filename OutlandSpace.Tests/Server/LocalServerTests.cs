@@ -33,17 +33,10 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void AfterCreateLocalServerDialogShouldBeCorrectCount()
         {
-            Assert.AreEqual(GlobalData.DialogsCountInTests, (server as LocalServer).HealthSystemDialogsCount());
-        }
+            var serverInternal = new LocalServer("TestsData");
+            serverInternal.Initialization(GlobalData.MainScenarioId);
 
-        [Test]
-        public void AfterCreateLocalServerDialogFromGameShouldBeCorrectCount()
-        {
-            IGameServer server = new LocalServer();
-
-            var dialogs = (server as LocalServer).HealthSystemDialogsCount();
-
-            Assert.AreEqual(GlobalData.DialogsCount, dialogs);
+            Assert.AreEqual(GlobalData.DialogsCountInTests, (serverInternal as LocalServer).HealthSystemDialogsCount());
         }
 
         [Test]

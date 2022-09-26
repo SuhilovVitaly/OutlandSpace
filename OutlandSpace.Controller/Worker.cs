@@ -58,7 +58,9 @@ namespace OutlandSpace.Controller
         {
             _turnSnapshot = _gameServer.Initialization(scenarioId);
 
-            //OnStartGame?.Invoke(_session);
+            var snapshot = _gameServer.GetSnapshot();
+
+            OnStartGame?.Invoke(snapshot);
 
             if (ticks <= 0) return;
 
