@@ -21,9 +21,7 @@ namespace OutlandSpace.UI
 
             Logger.Info("Start 'Outland Space' game desktop client.");
 
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(Global.Orchestration.GetScreen("Form1"));
+            Application.Run(Global.Orchestration.GetScreen("WindowBackGround"));
         }
     }
 }

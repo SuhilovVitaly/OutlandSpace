@@ -70,13 +70,25 @@
     <Compile Include="Controls\SeeThroughPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="Global.cs" />
+    <Compile Include="Screens\WindowAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Screens\WindowAbout.Designer.cs">
+      <DependentUpon>WindowAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Global.cs" />
+    <Compile Include="Screens\WindowMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\WindowMenu.Designer.cs">
+      <DependentUpon>WindowMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\WindowTacticalMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\WindowTacticalMap.Designer.cs">
+      <DependentUpon>WindowTacticalMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="UiManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,9 +98,6 @@
     <Compile Include="Screens\WindowBackGround.Designer.cs">
       <DependentUpon>WindowBackGround.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -98,8 +107,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Screens\WindowAbout.resx">
+      <DependentUpon>WindowAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Screens\WindowBackGround.resx">
       <DependentUpon>WindowBackGround.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\WindowMenu.resx">
+      <DependentUpon>WindowMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\WindowTacticalMap.resx">
+      <DependentUpon>WindowTacticalMap.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
