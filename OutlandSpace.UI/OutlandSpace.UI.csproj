@@ -67,6 +67,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\BaseRenderControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\BaseRenderControl.Designer.cs">
+      <DependentUpon>BaseRenderControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ControlSessionInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ControlSessionInfo.Designer.cs">
+      <DependentUpon>ControlSessionInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SeeThroughPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -89,6 +101,8 @@
     <Compile Include="Screens\WindowTacticalMap.Designer.cs">
       <DependentUpon>WindowTacticalMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\CrossThreadExtensions.cs" />
+    <Compile Include="Tools\HighResolutionDateTime.cs" />
     <Compile Include="UiManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +112,9 @@
     <Compile Include="Screens\WindowBackGround.Designer.cs">
       <DependentUpon>WindowBackGround.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\ControlSessionInfo.resx">
+      <DependentUpon>ControlSessionInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

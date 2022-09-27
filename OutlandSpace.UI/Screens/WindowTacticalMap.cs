@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using OutlandSpace.Universe.Engine.Session;
 
 namespace OutlandSpace.UI.Screens
 {
@@ -15,6 +8,15 @@ namespace OutlandSpace.UI.Screens
         public WindowTacticalMap()
         {
             InitializeComponent();
+
+            if (Global.Game is null) return;
+
+            Global.Game.OnStartGame += Event_StartGameSession;
+        }
+
+        private void Event_StartGameSession(IGameTurnSnapshot snapshot)
+        {
+            
         }
     }
 }

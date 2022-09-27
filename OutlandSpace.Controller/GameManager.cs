@@ -5,11 +5,16 @@ using OutlandSpace.Universe.Engine.Session;
 
 namespace OutlandSpace.Controller
 {
-    public class GameManager
+    public class GameManager: IGameEvents
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public event Action<IGameTurnSnapshot> OnStartGame;
+        public event Action<IGameTurnSnapshot> OnEndTurn;
+        public event Action<IGameTurnSnapshot, int> OnEndTurnStep;
+        public event Action<IGameTurnSnapshot> OnRefreshLocations;
+        public event Action<IGameTurnSnapshot, int> OnChangeChangeActiveObject;
+        public event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
 
         private readonly Worker _worker;
 
@@ -19,6 +24,12 @@ namespace OutlandSpace.Controller
             _worker = worker;
 
             _worker.OnStartGame += Event_StartGame;
+            _worker.OnEndTurn += Event_EndTurn;
+        }
+
+        private void Event_EndTurn(IGameTurnSnapshot snapshot)
+        {
+            OnEndTurn?.Invoke(snapshot);
         }
 
         public void StartGameSession()
@@ -33,6 +44,14 @@ namespace OutlandSpace.Controller
         private void Event_StartGame(IGameTurnSnapshot session)
         {
             OnStartGame?.Invoke(session);
+        }
+
+        public void ResumeSession()
+        {
+            // TODO: Add game session Id
+            Logger.Info("Resume game session");
+
+            _worker.SessionResume();
         }
     }
 }

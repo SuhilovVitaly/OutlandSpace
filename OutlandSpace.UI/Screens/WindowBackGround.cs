@@ -39,5 +39,10 @@ namespace OutlandSpace.UI.Screens
         {
             Global.Orchestration.ShowScreen("WindowMenu", false);
         }
+
+        private void button5_Click(object sender, System.EventArgs e)
+        {
+            Global.Game.ResumeSession();
+        }
     }
 }

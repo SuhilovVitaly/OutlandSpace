@@ -9,10 +9,10 @@ namespace OutlandSpace.Controller
 {
     public class Worker : IGameEvents
     {
-        public IWorkerMetrics Metrics { get; private set; }
+        public IWorkerMetrics Metrics { get; }
         private readonly IGameServer _gameServer;
         private IGameTurnSnapshot _turnSnapshot;
-        private readonly ReaderWriterLockSlim dictionaryLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _dictionaryLock = new();
 
         public event Action<IGameTurnSnapshot> OnStartGame;
         public event Action<IGameTurnSnapshot> OnEndTurn;
@@ -21,7 +21,7 @@ namespace OutlandSpace.Controller
         public event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
         public event Action<IGameTurnSnapshot, int> OnEndTurnStep;
 
-        public bool _isRunning { get; private set; }
+        private bool _isRunning;
 
         public Worker()
         {
@@ -76,7 +76,7 @@ namespace OutlandSpace.Controller
 
         public void GetDataFromServer()
         {
-            dictionaryLock.EnterWriteLock();
+            _dictionaryLock.EnterWriteLock();
 
             Metrics.IncreaseTick();
 
@@ -91,11 +91,12 @@ namespace OutlandSpace.Controller
                 // TODO: Invoke new turn
                 Metrics.IncreaseTurn();
                 _turnSnapshot = snapshot;
+                OnEndTurn?.Invoke(_turnSnapshot);
             }
 
             timeMetricGetGameSession.Stop();
 
-            dictionaryLock.ExitWriteLock();
+            _dictionaryLock.ExitWriteLock();
         }
     }
 }
