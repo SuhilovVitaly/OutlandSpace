@@ -11,9 +11,16 @@ namespace OutlandSpace.Controller
 
         public DateTime LastUpdate { get; private set; }
 
+        public int Commands { get; private set; }
+
         public void IncreaseAtomicTurnCounter()
         {
             AtomicTurnCounter++;
+        }
+
+        public void IncreaseCommands()
+        {
+            Commands++;
         }
 
         public void IncreaseTick()

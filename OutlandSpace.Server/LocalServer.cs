@@ -4,8 +4,11 @@ using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Engine.Session.Commands;
 using OutlandSpace.Universe.Tools;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Reflection;
 using System.Threading;
 
@@ -22,13 +25,17 @@ namespace OutlandSpace.Server
         private protected Health health;
 
         private readonly ReaderWriterLockSlim dictionaryLock = new();
+        private readonly ReaderWriterLockSlim commandsLock = new();
 
-        public IServerMetrics Metrics { get; private set; } 
+        public IServerMetrics Metrics { get; private set; }
+
+        private protected ConcurrentBag<ICommand> commands;
 
         public LocalServer(string dataFolder = "Data")
         {
             api = new Api();
             health = new Health();
+            commands = new ConcurrentBag<ICommand>();
         }
 
         public IGameTurnSnapshot Initialization(string scenarioId, string source = "TestsData")
@@ -97,17 +104,29 @@ namespace OutlandSpace.Server
         {
             Metrics.IncreaseTurn();
 
+            PushCommandsToSession();
+
             return sessionForExecute.RealTimeTurnExecute();
         }
 
         public IGameTurnSnapshot TurnExecute(int count = 1)
         {
-            for(var i = 0; i < count; i++)
+            PushCommandsToSession();
+
+            for (var i = 0; i < count; i++)
             {
                 session.TurnExecute();
             }
 
             return session.ToGameTurnSnapshot();
+        }
+
+        private void PushCommandsToSession()
+        {
+            commandsLock.EnterWriteLock();
+            session.PullTurnCommands(GetUnexecutedCommands());
+            commands = new ConcurrentBag<ICommand>();
+            commandsLock.ExitWriteLock();
         }
 
         public IDialog GetDialog(string id) => api.GetDialog(id, session.ResourcesStorage.Dialogs);
@@ -124,6 +143,18 @@ namespace OutlandSpace.Server
         public IGameTurnSnapshot GetSnapshot()
         {
             return session.ToGameTurnSnapshot();
+        }
+
+        public void Command(ICommand command)
+        {
+            commandsLock.EnterWriteLock();
+            commands.Add(command);
+            commandsLock.ExitWriteLock();
+        }
+
+        public ImmutableArray<ICommand> GetUnexecutedCommands()
+        {
+            return commands.ToImmutableArray();
         }
     }
 }

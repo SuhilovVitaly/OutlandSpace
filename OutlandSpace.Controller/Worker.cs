@@ -1,6 +1,7 @@
 ﻿using OutlandSpace.Server;
 using OutlandSpace.Universe.Engine;
 using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Engine.Session.Commands;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -97,6 +98,12 @@ namespace OutlandSpace.Controller
             timeMetricGetGameSession.Stop();
 
             _dictionaryLock.ExitWriteLock();
+        }
+
+        public void PushCommand(ICommand command)
+        {
+            _gameServer.Command(command);
+            Metrics.IncreaseCommands();
         }
     }
 }

@@ -3,13 +3,15 @@ using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Engine.Session.Commands;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.Serialization.Json;
+using System.Threading;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -24,6 +26,9 @@ namespace OutlandSpace.Server.Engine.Session
         public ITurnInteraction Interaction { get; private set; }
 
         public IResourcesStorage ResourcesStorage { get; }
+
+        private readonly ReaderWriterLockSlim commandsLock = new();
+        private protected ImmutableArray<ICommand> commands;
 
         public int Id { get; set; } // TODO: Refactor it to string Id with scenario
         private string _lastSnapshotId;
@@ -126,7 +131,14 @@ namespace OutlandSpace.Server.Engine.Session
         #region IStatus implementation
 
         public void Resume() => Status.Resume();
-        public void Pause() => Status.Pause();        
+        public void Pause() => Status.Pause();
+
+        public void PullTurnCommands(ImmutableArray<ICommand> currentTurnCommands)
+        {
+            commandsLock.EnterWriteLock();
+            commands = currentTurnCommands;
+            commandsLock.ExitWriteLock();
+        }
 
         public bool IsPause => Status.IsPause;
 

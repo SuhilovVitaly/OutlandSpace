@@ -1,5 +1,7 @@
-﻿using OutlandSpace.Universe.Engine.Dialogs;
+﻿using System.Collections.Immutable;
+using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Engine.Session.Commands;
 
 namespace OutlandSpace.Universe.Engine
 {
@@ -22,5 +24,9 @@ namespace OutlandSpace.Universe.Engine
         void PauseSession();
 
         IExecuteMetrics SessionMetrics();
+
+        void Command(ICommand command);
+
+        ImmutableArray<ICommand> GetUnexecutedCommands();
     }
 }

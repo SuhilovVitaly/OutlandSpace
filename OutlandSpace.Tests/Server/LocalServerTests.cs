@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OutlandSpace.Server;
 using OutlandSpace.Universe.Engine;
+using OutlandSpace.Universe.Engine.Session.Commands;
 
 namespace OutlandSpace.Tests.Server
 {
@@ -9,6 +10,8 @@ namespace OutlandSpace.Tests.Server
     public class LocalServerTests
     {
         private IGameServer server;
+        private const string defaultDialogId = "dialogId";
+        private const string defaultExitId = "exitId";
 
         [SetUp]
         public void Init()
@@ -112,5 +115,60 @@ namespace OutlandSpace.Tests.Server
 
             Assert.IsTrue(sessionMetrics.TurnCounter == 5);
         }
+
+        [Test]
+        public void SendAndReceiveCommandsToServerShouldBeCorrectForDialogCommand()
+        {
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);
+
+            ICommand iCommand = new CommandDialogAnswer(defaultDialogId, defaultExitId);
+            ICommand iCommand1 = new CommandDialogAnswer("Dialog 1", "Exit 1");
+            ICommand iCommand2 = new CommandDialogAnswer("Dialog 2", "Exit 2");
+            ICommand iCommand3 = new CommandDialogAnswer("Dialog 3", "Exit 3");
+
+            localServer.Command(iCommand);
+
+            var commands = localServer.GetUnexecutedCommands();
+
+            Assert.IsTrue(commands.Length == 1);
+
+            localServer.Command(iCommand1);
+            localServer.Command(iCommand2);
+
+            var commands2 = localServer.GetUnexecutedCommands();
+
+            Assert.IsTrue(commands2.Length == 3);
+        }
+
+        [Test]
+        public void SendAndReceiveCommandsToServerAfterTurnCalculateShouldBeCorrectForDialogCommand()
+        {
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);
+
+            ICommand iCommand = new CommandDialogAnswer(defaultDialogId, defaultExitId);
+            ICommand iCommand1 = new CommandDialogAnswer("Dialog 1", "Exit 1");
+            ICommand iCommand2 = new CommandDialogAnswer("Dialog 2", "Exit 2");
+            ICommand iCommand3 = new CommandDialogAnswer("Dialog 3", "Exit 3");
+
+            localServer.Command(iCommand);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
+
+            localServer.Command(iCommand1);
+            localServer.Command(iCommand2);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 3);
+
+            localServer.TurnExecute();
+
+            localServer.Command(iCommand3);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
+        }
+
     }
 }
