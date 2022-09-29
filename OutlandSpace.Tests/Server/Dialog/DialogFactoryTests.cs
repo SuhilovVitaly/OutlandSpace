@@ -43,7 +43,7 @@ namespace OutlandSpace.Tests.Server.Dialog
             var storage = dialogFactory.Initialize("TestsData");
 
             Assert.AreEqual(storage.Dialogs.Count, 5);
-            Assert.AreEqual(storage.Dialogs[0].Turn, 1);
+            Assert.AreEqual(storage.Dialogs[0].Turn, 12);
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace OutlandSpace.Tests.Server.Dialog
             var dialog = storage.GetDialog(dialogId);
 
             Assert.AreEqual(dialog.Id.ToString(), dialogId);
-            Assert.AreEqual(dialog.Turn, 1);
+            Assert.AreEqual(dialog.Turn, 12);
             Assert.AreEqual(dialog.Action, "window_dialog_common");
             Assert.AreEqual(dialog.Exits.Count, 2);
             Assert.AreEqual(dialog.Exits[0].Label, "Label 1");

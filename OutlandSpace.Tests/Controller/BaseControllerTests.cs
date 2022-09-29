@@ -131,5 +131,21 @@ namespace OutlandSpace.Tests
             Assert.AreEqual(1, worker.Metrics.Commands);
         }
 
+        [Test]
+        public void ManualTurnExecuteOnServerShouldBeCorrect()
+        {
+            var worker = new Worker();
+
+            worker.StartNewGameSession(GlobalData.MainScenarioId, 100);
+
+            ICommand iCommand = new CommandDialogAnswer("Dialog 1", "Exit 1");
+
+            worker.PushCommand(iCommand);
+
+            Assert.AreEqual(1, worker.Metrics.Commands);
+
+            worker.ExecuteCommand();
+        }
+
     }
 }

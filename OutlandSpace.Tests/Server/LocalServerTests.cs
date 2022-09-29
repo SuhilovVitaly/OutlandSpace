@@ -170,5 +170,42 @@ namespace OutlandSpace.Tests.Server
             Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
         }
 
+        [Test]
+        public void ChainDialogsShouldBeCorrect()
+        {
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);            
+
+            localServer.TurnExecute();
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 0);
+
+            var snapshotZeroTurn = localServer.GetSnapshot();
+
+            Assert.That(snapshotZeroTurn.Interaction.RootDialog.Id == "x90adc8a-eca5-4c84-b4a1-682098bb4829");
+
+            localServer.TurnExecute();
+
+            var snapshotFirstTurn = localServer.GetSnapshot();
+
+            Assert.IsNull(snapshotFirstTurn.Interaction);
+
+            ICommand iCommand = new CommandDialogAnswer
+                (
+                dialogId: "x90adc8a-eca5-4c84-b4a1-682098bb4829",
+                exitId: "xd35df2c-2018-4a90-8fd7-af3cc0b1f914"
+                );
+
+            localServer.Command(iCommand);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
+
+            localServer.TurnExecute();
+
+            var snapshotSecondTurn = localServer.GetSnapshot();
+
+            Assert.That(snapshotSecondTurn.Interaction.RootDialog.Id == "xd35df2c-2018-4a90-8fd7-af3cc0b1f914");
+        }
     }
 }

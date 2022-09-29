@@ -55,12 +55,10 @@ namespace OutlandSpace.Server.Engine.Session
 
             Turn = turn;
 
-            var turnDialogs = DialogsCalculation.Execute(ResourcesStorage.Dialogs, Turn);
-
             Logger.Info("Start new game session.");
 
             CelestialObjects = scenario.CelestialObjects;
-            Interaction = turnDialogs;
+            Interaction = DialogsCalculation.Execute(ResourcesStorage.Dialogs, Turn, new ImmutableArray<ICommand>());
             Storage = ResourcesStorage.Dialogs;
 
             Status.Pause();
@@ -92,7 +90,7 @@ namespace OutlandSpace.Server.Engine.Session
 
             CelestialObjects = LocationsExecute(granularity);
 
-            Interaction = DialogsExecute();
+            Interaction = DialogsExecute(commands);
 
             EndTurnAndMetricsUpdate(stopwatch.Elapsed.TotalMilliseconds);
 
@@ -107,9 +105,9 @@ namespace OutlandSpace.Server.Engine.Session
             return celestialObjects;
         }
 
-        private ITurnInteraction DialogsExecute()
+        private ITurnInteraction DialogsExecute(ImmutableArray<ICommand> currentTurnCommands)
         {
-            var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage);
+            var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage, currentTurnCommands);
 
             return dialogs;
         }

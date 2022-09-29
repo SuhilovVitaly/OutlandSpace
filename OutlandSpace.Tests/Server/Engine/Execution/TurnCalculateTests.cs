@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
-using OutlandSpace.Server.Engine.Execution;
-using OutlandSpace.Server.Engine.Session;
-using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Server;
+
 
 namespace OutlandSpace.Tests.Server.Engine.Execution
 {
@@ -11,30 +10,39 @@ namespace OutlandSpace.Tests.Server.Engine.Execution
         [Test]
         public void AfterExecuteTwoTurnsNumberShouldBeTurnPlusTwo()
         {
-            var session = GlobalData.GameSessionWithMainScenarioId;
+            var localServer = new LocalServer("TestsData");
 
-            var firstTurnExecuteSnapshot = session.TurnExecute();
+            localServer.Initialization(GlobalData.MainScenarioId);
+
+            localServer.TurnExecute();
+
+            var firstTurnExecuteSnapshot = localServer.GetSnapshot();
 
             Assert.That(firstTurnExecuteSnapshot.Turn == 1);
-            Assert.That(session.Turn == 1);
 
-            var secondTurnExecuteSnapshot = session.TurnExecute();
+            localServer.TurnExecute();
+
+            var secondTurnExecuteSnapshot = localServer.GetSnapshot();
 
             Assert.That(secondTurnExecuteSnapshot.Turn == 2);
-            Assert.That(session.Turn == 2);
         }
 
         [Test]
         public void AfterExecuteHundredTurnsNumberShouldBeTurnPlusHundred()
         {
-            var session = GlobalData.GameSessionWithMainScenarioId;
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);
+
 
             for (int i = 0; i< 1000; i++)
             {
-                session.TurnExecute();
+                localServer.TurnExecute();
             }
 
-            Assert.That(session.Turn == 1000);
+            var snapshot = localServer.GetSnapshot();
+
+            Assert.That(snapshot.Turn == 1000);
         }
     }
 }

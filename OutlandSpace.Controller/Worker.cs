@@ -105,5 +105,12 @@ namespace OutlandSpace.Controller
             _gameServer.Command(command);
             Metrics.IncreaseCommands();
         }
+
+        public void ExecuteCommand()
+        {
+            var snapshotBefore = _gameServer.GetSnapshot();
+            _gameServer.TurnExecute();
+            var snapshotAfter = _gameServer.GetSnapshot();
+        }
     }
 }
