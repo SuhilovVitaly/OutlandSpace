@@ -11,10 +11,8 @@ namespace OutlandSpace.Controller
 
         public event Action<IGameTurnSnapshot> OnStartGame;
         public event Action<IGameTurnSnapshot> OnEndTurn;
-        public event Action<IGameTurnSnapshot, int> OnEndTurnStep;
+        public event Action<IGameTurnSnapshot> OnReceivedDialog;
         public event Action<IGameTurnSnapshot> OnRefreshLocations;
-        public event Action<IGameTurnSnapshot, int> OnChangeChangeActiveObject;
-        public event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
 
         private readonly Worker _worker;
 
@@ -25,6 +23,12 @@ namespace OutlandSpace.Controller
 
             _worker.OnStartGame += Event_StartGame;
             _worker.OnEndTurn += Event_EndTurn;
+            _worker.OnReceivedDialog += Event_ReceiveDialog;
+        }
+
+        private void Event_ReceiveDialog(IGameTurnSnapshot snapshot)
+        {
+            OnReceivedDialog?.Invoke(snapshot);
         }
 
         private void Event_EndTurn(IGameTurnSnapshot snapshot)

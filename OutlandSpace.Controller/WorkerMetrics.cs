@@ -7,6 +7,8 @@ namespace OutlandSpace.Controller
 
         public int TurnCounter { get; private set; }
 
+        public int DialogsReceived { get; private set; }
+
         public int AtomicTurnCounter { get; private set; }
 
         public DateTime LastUpdate { get; private set; }
@@ -16,6 +18,11 @@ namespace OutlandSpace.Controller
         public void IncreaseAtomicTurnCounter()
         {
             AtomicTurnCounter++;
+        }
+
+        public void IncreaseDialogsReceived()
+        {
+            DialogsReceived++;
         }
 
         public void IncreaseCommands()

@@ -4,12 +4,16 @@ using OutlandSpace.Universe.Engine.Session;
 using OutlandSpace.Universe.Engine.Session.Commands;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
+using log4net;
 
 namespace OutlandSpace.Controller
 {
     public class Worker : IGameEvents
     {
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
+
         public IWorkerMetrics Metrics { get; }
         private readonly IGameServer _gameServer;
         private IGameTurnSnapshot _turnSnapshot;
@@ -17,10 +21,8 @@ namespace OutlandSpace.Controller
 
         public event Action<IGameTurnSnapshot> OnStartGame;
         public event Action<IGameTurnSnapshot> OnEndTurn;
+        public event Action<IGameTurnSnapshot> OnReceivedDialog;
         public event Action<IGameTurnSnapshot> OnRefreshLocations;
-        public event Action<IGameTurnSnapshot, int> OnChangeChangeActiveObject;
-        public event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
-        public event Action<IGameTurnSnapshot, int> OnEndTurnStep;
 
         private bool _isRunning;
 
@@ -33,7 +35,6 @@ namespace OutlandSpace.Controller
 
         public IGameTurnSnapshot GetSnapshot()
         {
-            
             return _turnSnapshot;
         }
 
@@ -44,14 +45,11 @@ namespace OutlandSpace.Controller
 
         public void SessionResume()
         {
-            //Logger.Info($"Game resumed. Turn is {_session.Turn}");
-
             _gameServer.ResumeSession();
         }
 
         public void SessionPause()
         {
-            //Logger.Info($"Game paused. Turn is {_session.Turn}");
             _gameServer.PauseSession();
         }
 
@@ -74,7 +72,6 @@ namespace OutlandSpace.Controller
 
         }
 
-
         public void GetDataFromServer()
         {
             _dictionaryLock.EnterWriteLock();
@@ -89,15 +86,38 @@ namespace OutlandSpace.Controller
 
             if(snapshot.Id != _turnSnapshot.Id)
             {
-                // TODO: Invoke new turn
-                Metrics.IncreaseTurn();
-                _turnSnapshot = snapshot;
-                OnEndTurn?.Invoke(_turnSnapshot);
+                OnTurnCompleted(snapshot);
+
+                if (snapshot.Interaction is not null)
+                {
+                    OnDialogReceived(snapshot);
+                }
             }
 
             timeMetricGetGameSession.Stop();
 
             _dictionaryLock.ExitWriteLock();
+        }
+
+        protected virtual void OnDialogReceived(IGameTurnSnapshot snapshot)
+        {
+            Metrics.IncreaseDialogsReceived();
+
+            Logger.Debug($"[Dialog Received] Turn Id: {snapshot.Turn} Dialog Id: {snapshot.Interaction.RootDialog.Id}");
+
+            OnReceivedDialog?.Invoke(snapshot);
+        }
+
+        protected virtual void OnTurnCompleted(IGameTurnSnapshot snapshot) 
+        {
+            Metrics.IncreaseTurn();
+
+            // Update current turn snapshot
+            _turnSnapshot = snapshot;
+
+            Logger.Debug($"[Turn Completed] Turn Id: {snapshot.Turn}");
+
+            OnEndTurn?.Invoke(snapshot);
         }
 
         public void PushCommand(ICommand command)

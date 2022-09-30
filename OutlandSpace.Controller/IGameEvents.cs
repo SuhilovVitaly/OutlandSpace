@@ -7,9 +7,7 @@ namespace OutlandSpace.Controller
     {
         event Action<IGameTurnSnapshot> OnStartGame;
         event Action<IGameTurnSnapshot> OnEndTurn;
-        event Action<IGameTurnSnapshot, int> OnEndTurnStep;
+        event Action<IGameTurnSnapshot> OnReceivedDialog;
         event Action<IGameTurnSnapshot> OnRefreshLocations;
-        event Action<IGameTurnSnapshot, int> OnChangeChangeActiveObject;
-        event Action<IGameTurnSnapshot, int> OnChangeChangeSelectedObject;
     }
 }

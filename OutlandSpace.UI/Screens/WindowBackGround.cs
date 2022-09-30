@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using OutlandSpace.Universe.Engine.Session;
 
 namespace OutlandSpace.UI.Screens
 {
@@ -13,6 +14,35 @@ namespace OutlandSpace.UI.Screens
 
             ShowInTaskbar = true;
             ShowIcon = false;
+
+            if (Global.Game is null) return;
+
+            Global.Game.OnReceivedDialog += Event_ReceivedDialog;
+        }
+
+        private void Event_ReceivedDialog(IGameTurnSnapshot snapshot)
+        {
+            var windowDialog = new WindowDialog(snapshot);
+
+            var result = OpenModalForm(windowDialog);
+        }
+
+        private delegate DialogResult RefreshCallback(Form screen);
+
+        private DialogResult OpenModalForm(Form screen)
+        {
+            Form mainForm = this;
+
+            switch (mainForm.InvokeRequired)
+            {
+                case true:
+                {
+                    RefreshCallback d = OpenModalForm;
+                    return (DialogResult)mainForm.Invoke(d, screen);
+                }
+                default:
+                    return screen.ShowDialog();
+            }
         }
 
         private void button1_Click(object sender, System.EventArgs e)
