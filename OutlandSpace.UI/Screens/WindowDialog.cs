@@ -26,5 +26,10 @@ namespace OutlandSpace.UI.Screens
             Global.Game.ResumeSession();
             Close();
         }
+
+        private void WindowDialog_Load(object sender, System.EventArgs e)
+        {
+            
+        }
     }
 }

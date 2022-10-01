@@ -88,6 +88,7 @@ namespace OutlandSpace.UI.Screens
             this.Name = "WindowDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "WindowDialog";
+            this.Load += new System.EventHandler(this.WindowDialog_Load);
             this.ResumeLayout(false);
 
         }
