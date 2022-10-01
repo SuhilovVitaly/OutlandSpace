@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using OutlandSpace.Universe.Engine.Dialogs;
 
 namespace OutlandSpace.UI.Prototype.Paint
 {
@@ -32,10 +33,10 @@ namespace OutlandSpace.UI.Prototype.Paint
             parent.MouseMove += Event_MouseMove;
         }
 
-        public DialogButton(Rectangle buttonSurface, int position, Form parent) : this(parent)
+        public DialogButton(Rectangle buttonSurface, int position, DialogExit dialogExit, Form parent) : this(parent)
         {
             Position = position;
-            Text = $@"Text example for Button {Position}";
+            Text = dialogExit.Label;
             ButtonSurface = new Rectangle(buttonSurface.Left, buttonSurface.Top + Position * (ButtonHeight + BaseInterval), buttonSurface.Width, buttonSurface.Height);// buttonSurface;
         }
 

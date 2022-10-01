@@ -14,7 +14,7 @@ namespace OutlandSpace.UI.Prototype
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ScreenCommonDialog());
+            Application.Run(new ScreenCommonDialog(Global.GetGameSnapshot(), Global.GetDialog()));
         }
     }
 }

@@ -6,4 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OutlandSpace.Universe\OutlandSpace.Universe.csproj" />
+  </ItemGroup>
+
 </Project>
