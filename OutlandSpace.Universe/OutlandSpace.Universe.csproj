@@ -13,6 +13,7 @@
     <None Remove="Geometry\" />
     <None Remove="System.Collections.Immutable" />
     <None Remove="Engine\Session\Commands\" />
+    <None Remove="Entities\Equipment\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
@@ -20,5 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Session\Commands\" />
+    <Folder Include="Entities\Equipment\" />
   </ItemGroup>
 </Project>
