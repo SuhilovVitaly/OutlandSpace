@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using NUnit.Framework;
 using OutlandSpace.Controller;
+using OutlandSpace.Universe.Engine.Session.Commands;
 
 namespace OutlandSpace.Tests
 {
@@ -114,6 +115,36 @@ namespace OutlandSpace.Tests
             var snapshotAfterResume = worker.GetSnapshot();
 
             Assert.IsTrue(snapshot.Turn < snapshotAfterResume.Turn);
+        }
+
+        [Test]
+        public void WorkerShouldPushCommandToServerCorrect()
+        {
+            var worker = new Worker();
+
+            worker.StartNewGameSession(GlobalData.MainScenarioId, 100);
+
+            ICommand iCommand = new CommandDialogAnswer("Dialog 1", "Exit 1");
+
+            worker.PushCommand(iCommand);
+
+            Assert.AreEqual(1, worker.Metrics.Commands);
+        }
+
+        [Test]
+        public void ManualTurnExecuteOnServerShouldBeCorrect()
+        {
+            var worker = new Worker();
+
+            worker.StartNewGameSession(GlobalData.MainScenarioId, 100);
+
+            ICommand iCommand = new CommandDialogAnswer("Dialog 1", "Exit 1");
+
+            worker.PushCommand(iCommand);
+
+            Assert.AreEqual(1, worker.Metrics.Commands);
+
+            worker.ExecuteCommand();
         }
 
     }

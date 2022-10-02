@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using OutlandSpace.Universe.Engine.Dialogs;
+using OutlandSpace.Universe.Engine.Session.Commands;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 
 namespace OutlandSpace.Universe.Engine.Session
@@ -19,5 +21,6 @@ namespace OutlandSpace.Universe.Engine.Session
         ITurnInteraction Interaction { get; }
         IDialogsStorage Storage { get; }
         IExecuteMetrics Metrics { get; }
+        void PullTurnCommands(ImmutableArray<ICommand> currentTurnCommands);
     }
 }

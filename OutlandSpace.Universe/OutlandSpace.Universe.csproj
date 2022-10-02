@@ -12,9 +12,13 @@
     <None Remove="log4net" />
     <None Remove="Geometry\" />
     <None Remove="System.Collections.Immutable" />
+    <None Remove="Engine\Session\Commands\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\Session\Commands\" />
   </ItemGroup>
 </Project>

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OutlandSpace.Universe.Tools
 {
     public class FilesFactory
     {
-        const int BUFFER_SIZE = 4096;
+        private const int BufferSize = 4096;
 
         public static List<string> GetFilesContentFromDirectory(string rootFolder, string fileExtention = "*.json")
         {
@@ -20,42 +21,59 @@ namespace OutlandSpace.Universe.Tools
                 return new List<string>();
             }
 
-            var tasks = GetFilesContentFromDirectoryAsync(rootFolder, fileExtention);
-
-            foreach (var fileContent in tasks.GetAwaiter().GetResult())
+            try
             {
-                resultCollection.Add(fileContent);
+                var rootPath = Path.Combine(Environment.CurrentDirectory, rootFolder);
+                var allFiles = Directory.GetFiles(rootPath, fileExtention, SearchOption.AllDirectories);
+
+                resultCollection.AddRange(allFiles.Select(File.ReadAllText));
+                //var tasks = GetFilesContentFromDirectoryAsync(rootFolder, fileExtention);
+
+                //foreach (var fileContent in tasks.GetAwaiter().GetResult())
+                //{
+                //    resultCollection.Add(fileContent);
+                //}
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
             return resultCollection;
         }
 
-        async static Task<string[]> GetFilesContentFromDirectoryAsync(string rootFolder, string fileExtention )
+        private static async Task<string[]> GetFilesContentFromDirectoryAsync(string rootFolder, string fileExtention )
         {
-            //"/Users/vitalysushilov/Projects/OutlandSpace/OutlandSpace.Tests/bin/Debug/netcoreapp3.1/TestsData/Scenarios/7045d54c-412b-429e-b1ed-43e62dcc10e6/Dialogs"
-            //"/Users/vitalysushilov/Projects/OutlandSpace/OutlandSpace.Tests/bin/Debug/netcoreapp3.1/TestsData/Scenarios/7045d54c-412b-429e-b1ed-43e62dcc10e6/Dialogs"
             var rootPath = Path.Combine(Environment.CurrentDirectory, rootFolder);
-            var allfiles = Directory.GetFiles(rootPath, fileExtention, SearchOption.AllDirectories);
+            var allFiles = Directory.GetFiles(rootPath, fileExtention, SearchOption.AllDirectories);
 
-            Task<string>[] readTasks = new Task<string>[allfiles.Length];
+            Task<string>[] readTasks = new Task<string>[allFiles.Length];
 
-            for (int i = 0; i < allfiles.Length; i++)
+            for (var i = 0; i < allFiles.Length; i++)
             {
-                readTasks[i] = ReadFileContentAsync(allfiles[i]);
+                try
+                {
+                    readTasks[i] = ReadFileContentAsync(allFiles[i]);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
-           
 
             return await Task.WhenAll(readTasks);
         }
 
-        async static Task<string> ReadFileContentAsync(string fileName)
+        private static async Task<string> ReadFileContentAsync(string fileName)
         {
             using var stream = new FileStream(
                 fileName,
                 FileMode.Open,
                 FileAccess.Read,
                 FileShare.None,
-                BUFFER_SIZE,
+                BufferSize,
                 FileOptions.Asynchronous);
 
             using var sr = new StreamReader(stream);
@@ -64,7 +82,16 @@ namespace OutlandSpace.Universe.Tools
 
             while (sr.Peek() > -1)
             {
-                fileContent += await sr.ReadLineAsync();
+                try
+                {
+                    fileContent += await sr.ReadLineAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+                
             }
 
             return fileContent;

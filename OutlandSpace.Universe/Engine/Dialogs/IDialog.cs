@@ -10,6 +10,8 @@ namespace OutlandSpace.Universe.Engine.Dialogs
 
         public string Action { get; }
 
+        public string Text { get; }
+
         public List<DialogExit> Exits { get; }
     }
 }

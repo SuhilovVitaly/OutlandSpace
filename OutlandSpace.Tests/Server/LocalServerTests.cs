@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OutlandSpace.Server;
 using OutlandSpace.Universe.Engine;
+using OutlandSpace.Universe.Engine.Session.Commands;
 
 namespace OutlandSpace.Tests.Server
 {
@@ -9,6 +10,8 @@ namespace OutlandSpace.Tests.Server
     public class LocalServerTests
     {
         private IGameServer server;
+        private const string defaultDialogId = "dialogId";
+        private const string defaultExitId = "exitId";
 
         [SetUp]
         public void Init()
@@ -33,17 +36,10 @@ namespace OutlandSpace.Tests.Server
         [Test]
         public void AfterCreateLocalServerDialogShouldBeCorrectCount()
         {
-            Assert.AreEqual(GlobalData.DialogsCountInTests, (server as LocalServer).HealthSystemDialogsCount());
-        }
+            var serverInternal = new LocalServer("TestsData");
+            serverInternal.Initialization(GlobalData.MainScenarioId);
 
-        [Test]
-        public void AfterCreateLocalServerDialogFromGameShouldBeCorrectCount()
-        {
-            IGameServer server = new LocalServer();
-
-            var dialogs = (server as LocalServer).HealthSystemDialogsCount();
-
-            Assert.AreEqual(GlobalData.DialogsCount, dialogs);
+            Assert.AreEqual(GlobalData.DialogsCountInTests, (serverInternal as LocalServer).HealthSystemDialogsCount());
         }
 
         [Test]
@@ -118,6 +114,98 @@ namespace OutlandSpace.Tests.Server
             var sessionMetrics = localServer.SessionMetrics();
 
             Assert.IsTrue(sessionMetrics.TurnCounter == 5);
+        }
+
+        [Test]
+        public void SendAndReceiveCommandsToServerShouldBeCorrectForDialogCommand()
+        {
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);
+
+            ICommand iCommand = new CommandDialogAnswer(defaultDialogId, defaultExitId);
+            ICommand iCommand1 = new CommandDialogAnswer("Dialog 1", "Exit 1");
+            ICommand iCommand2 = new CommandDialogAnswer("Dialog 2", "Exit 2");
+            ICommand iCommand3 = new CommandDialogAnswer("Dialog 3", "Exit 3");
+
+            localServer.Command(iCommand);
+
+            var commands = localServer.GetUnexecutedCommands();
+
+            Assert.IsTrue(commands.Length == 1);
+
+            localServer.Command(iCommand1);
+            localServer.Command(iCommand2);
+
+            var commands2 = localServer.GetUnexecutedCommands();
+
+            Assert.IsTrue(commands2.Length == 3);
+        }
+
+        [Test]
+        public void SendAndReceiveCommandsToServerAfterTurnCalculateShouldBeCorrectForDialogCommand()
+        {
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);
+
+            ICommand iCommand = new CommandDialogAnswer(defaultDialogId, defaultExitId);
+            ICommand iCommand1 = new CommandDialogAnswer("Dialog 1", "Exit 1");
+            ICommand iCommand2 = new CommandDialogAnswer("Dialog 2", "Exit 2");
+            ICommand iCommand3 = new CommandDialogAnswer("Dialog 3", "Exit 3");
+
+            localServer.Command(iCommand);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
+
+            localServer.Command(iCommand1);
+            localServer.Command(iCommand2);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 3);
+
+            localServer.TurnExecute();
+
+            localServer.Command(iCommand3);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
+        }
+
+        [Test]
+        public void ChainDialogsShouldBeCorrect()
+        {
+            var localServer = new LocalServer("TestsData");
+
+            localServer.Initialization(GlobalData.MainScenarioId);            
+
+            localServer.TurnExecute();
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 0);
+
+            var snapshotZeroTurn = localServer.GetSnapshot();
+
+            Assert.That(snapshotZeroTurn.Interaction.RootDialog.Id == "x90adc8a-eca5-4c84-b4a1-682098bb4829");
+
+            localServer.TurnExecute();
+
+            var snapshotFirstTurn = localServer.GetSnapshot();
+
+            Assert.IsNull(snapshotFirstTurn.Interaction);
+
+            ICommand iCommand = new CommandDialogAnswer
+                (
+                dialogId: "x90adc8a-eca5-4c84-b4a1-682098bb4829",
+                exitId: "xd35df2c-2018-4a90-8fd7-af3cc0b1f914"
+                );
+
+            localServer.Command(iCommand);
+
+            Assert.IsTrue(localServer.GetUnexecutedCommands().Length == 1);
+
+            localServer.TurnExecute();
+
+            var snapshotSecondTurn = localServer.GetSnapshot();
+
+            Assert.That(snapshotSecondTurn.Interaction.RootDialog.Id == "xd35df2c-2018-4a90-8fd7-af3cc0b1f914");
         }
     }
 }

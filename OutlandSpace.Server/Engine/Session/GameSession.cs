@@ -3,12 +3,15 @@ using OutlandSpace.Server.Engine.Execution;
 using OutlandSpace.Server.Engine.Execution.Calculation;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Engine.Session.Commands;
 using OutlandSpace.Universe.Entities.CelestialObjects;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Reflection;
+using System.Threading;
 
 namespace OutlandSpace.Server.Engine.Session
 {
@@ -24,7 +27,10 @@ namespace OutlandSpace.Server.Engine.Session
 
         public IResourcesStorage ResourcesStorage { get; }
 
-        public int Id { get; set; }
+        private readonly ReaderWriterLockSlim commandsLock = new();
+        private protected ImmutableArray<ICommand> commands;
+
+        public int Id { get; set; } // TODO: Refactor it to string Id with scenario
         private string _lastSnapshotId;
 
         public int Turn { get; private set; }
@@ -47,16 +53,12 @@ namespace OutlandSpace.Server.Engine.Session
         {
             ResourcesStorage = new ResourcesStorage(new Resources(scenario.CelestialObjects, scenario.Dialogs, scenario.Characters));
 
-            //var storage = new DialogsStorage(scenario.Dialogs);
-
             Turn = turn;
-
-            var turnDialogs = DialogsCalculation.Execute(ResourcesStorage.Dialogs, Turn);
 
             Logger.Info("Start new game session.");
 
             CelestialObjects = scenario.CelestialObjects;
-            Interaction = turnDialogs;
+            Interaction = DialogsCalculation.Execute(ResourcesStorage.Dialogs, Turn, new ImmutableArray<ICommand>());
             Storage = ResourcesStorage.Dialogs;
 
             Status.Pause();
@@ -88,7 +90,7 @@ namespace OutlandSpace.Server.Engine.Session
 
             CelestialObjects = LocationsExecute(granularity);
 
-            Interaction = DialogsExecute();
+            Interaction = DialogsExecute(commands);
 
             EndTurnAndMetricsUpdate(stopwatch.Elapsed.TotalMilliseconds);
 
@@ -103,9 +105,9 @@ namespace OutlandSpace.Server.Engine.Session
             return celestialObjects;
         }
 
-        private ITurnInteraction DialogsExecute()
+        private ITurnInteraction DialogsExecute(ImmutableArray<ICommand> currentTurnCommands)
         {
-            var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage);
+            var dialogs = TurnCalculate.GetCurrentTurnDialogs(Turn, Storage, currentTurnCommands);
 
             return dialogs;
         }
@@ -127,7 +129,14 @@ namespace OutlandSpace.Server.Engine.Session
         #region IStatus implementation
 
         public void Resume() => Status.Resume();
-        public void Pause() => Status.Pause();        
+        public void Pause() => Status.Pause();
+
+        public void PullTurnCommands(ImmutableArray<ICommand> currentTurnCommands)
+        {
+            commandsLock.EnterWriteLock();
+            commands = currentTurnCommands;
+            commandsLock.ExitWriteLock();
+        }
 
         public bool IsPause => Status.IsPause;
 
