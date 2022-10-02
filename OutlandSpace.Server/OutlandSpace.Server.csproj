@@ -22,10 +22,12 @@
     <None Remove="Engine\Execution\Calculation\" />
     <None Remove="Data\Scenarios\" />
     <None Remove="System.Collections.Immutable" />
+    <None Remove="Engine\Equipment\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Execution\" />
     <Folder Include="Engine\Execution\Calculation\" />
+    <Folder Include="Engine\Equipment\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
