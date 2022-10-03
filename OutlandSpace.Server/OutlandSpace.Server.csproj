@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Engine\Execution\" />
     <Folder Include="Engine\Execution\Calculation\" />
-    <Folder Include="Engine\Equipment\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

@@ -16,6 +16,7 @@ using System.Threading;
 namespace OutlandSpace.Server.Engine.Session
 {
     [Serializable]
+    [DebuggerDisplay("Turn: {Turn}")]
     public class GameSession: IGameSession
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
