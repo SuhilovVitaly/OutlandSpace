@@ -13,14 +13,14 @@ namespace OutlandSpace.Server.Engine.Equipment
             var metrics = new EquipmentMetrics();
             var equipment = new List<IModule>();
 
-            equipment.AddRange(Load(dialogsRootFolder + @"\Modules", Category.Reactor));
+            equipment.AddRange(Load(Path.Combine(dialogsRootFolder , @"Modules"), Category.Reactor));
 
             return new EquipmentStorage(equipment, metrics);
         }
 
         private static IEnumerable<IModule> Load(string dialogsRootFolder,  Category moduleType)
         {
-            var rootPath = Path.Combine(Environment.CurrentDirectory, dialogsRootFolder + @"\" + moduleType);
+            var rootPath = Path.Combine(Environment.CurrentDirectory, Path.Combine(dialogsRootFolder, moduleType.ToString()));
 
             var modules = new List<IModule>();
 

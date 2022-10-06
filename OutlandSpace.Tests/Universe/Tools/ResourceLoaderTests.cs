@@ -14,7 +14,7 @@ namespace OutlandSpace.Tests.Universe.Tools
         [Test]
         public void LoadCharactersFromGeneralStorageShouldBuCorrect()
         {
-            var rootPath = Path.Combine(Environment.CurrentDirectory, @"TestsData\Characters");
+            var rootPath = Path.Combine(Environment.CurrentDirectory, Path.Combine("TestsData","Characters"));
 
             var objects = OutlandSpace.Universe.Tools.ResourceLoader<CrewMember>.LoadFromFolder(rootPath);
 
@@ -24,7 +24,7 @@ namespace OutlandSpace.Tests.Universe.Tools
         [Test]
         public void LoadReactorModulesFromGeneralStorageShouldBuCorrect()
         {
-            var rootPath = Path.Combine(Environment.CurrentDirectory, @"TestsData\Modules\Reactor");
+            var rootPath = Path.Combine(Environment.CurrentDirectory, Path.Combine("TestsData", "Modules", "Reactor"));
 
             var reactors = OutlandSpace.Universe.Tools.ResourceLoader<Reactor>.LoadFromFolder(rootPath);
 
