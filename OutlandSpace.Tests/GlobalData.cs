@@ -1,6 +1,5 @@
 ﻿using System;
 using OutlandSpace.Server;
-using OutlandSpace.Server.Engine.Dialog;
 using OutlandSpace.Server.Engine.Session;
 using OutlandSpace.Universe.Engine.Session;
 
@@ -18,7 +17,6 @@ namespace OutlandSpace.Tests
 
         private static readonly Lazy<LocalServer> LocalServer = new Lazy<LocalServer>(() => new LocalServer(TestsDataFolder));
 
-        private static readonly DialogsStorage Storage = new DialogFactory().Initialize(TestsDataFolder);
 
         public static IGameSession GameSessionWithMainScenarioId
         {
@@ -35,14 +33,6 @@ namespace OutlandSpace.Tests
             {
                 LocalServer.Value.Initialization(MainScenarioId);
                 return LocalServer.Value;
-            }
-        }
-
-        public static DialogsStorage DialogsStorageWithTestData
-        {
-            get
-            {
-                return Storage;
             }
         }
     }

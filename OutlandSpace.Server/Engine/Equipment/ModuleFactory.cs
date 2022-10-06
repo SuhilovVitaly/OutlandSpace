@@ -13,7 +13,10 @@ namespace OutlandSpace.Server.Engine.Equipment
             var metrics = new EquipmentMetrics();
             var equipment = new List<IModule>();
 
-            equipment.AddRange(Load(Path.Combine(dialogsRootFolder , @"Modules"), Category.Reactor));
+            foreach (Category category in (Category[])Enum.GetValues(typeof(Category)))
+            {
+                equipment.AddRange(Load(Path.Combine(dialogsRootFolder, @"Modules"), category));
+            }            
 
             return new EquipmentStorage(equipment, metrics);
         }
