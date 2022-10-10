@@ -23,7 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Engine\Session\Commands\" />
-    <Folder Include="Entities\Equipment\" />
     <Folder Include="Entities\Equipment\Reactor\" />
   </ItemGroup>
 </Project>
