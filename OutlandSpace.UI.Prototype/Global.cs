@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using OutlandSpace.Universe.Engine.Dialogs;
 using OutlandSpace.Universe.Engine.Session;
+using OutlandSpace.Universe.Entities.CelestialObjects;
+using OutlandSpace.Universe.Entities.Equipment.Compartments;
 
 namespace OutlandSpace.UI.Prototype
 {
@@ -28,6 +31,71 @@ namespace OutlandSpace.UI.Prototype
             );
 
             return result;
+        }
+
+        public static Spacecraft GetSpacecraft()
+        {
+            var id = Guid.NewGuid().ToString();
+
+            var spacecraft = new Spacecraft
+            {
+                Id = id,
+                Compartments = new List<ICompartment>
+                {
+                    new BaseCompartment(id)
+                    {
+                        Width = 2,
+                        Height = 2,
+                        X = 3,
+                        Y = 3
+                    },
+                    new BaseCompartment(id)
+                    {
+                        Width = 2,
+                        Height = 2,
+                        X = 5,
+                        Y = 3
+                    }
+                    ,
+                    new BaseCompartment(id)
+                    {
+                        Width = 2,
+                        Height = 2,
+                        X = 7,
+                        Y = 3
+                    },
+                    new BaseCompartment(id)
+                    {
+                        Width = 3,
+                        Height = 4,
+                        X = 9,
+                        Y = 2
+                    },
+                    new BaseCompartment(id)
+                    {
+                        Width = 1,
+                        Height = 2,
+                        X = 12,
+                        Y = 3
+                    },
+                    new BaseCompartment(id)
+                    {
+                        Width = 2,
+                        Height = 1,
+                        X = 4,
+                        Y = 2
+                    },
+                    new BaseCompartment(id)
+                    {
+                        Width = 2,
+                        Height = 1,
+                        X = 4,
+                        Y = 5
+                    }
+                }
+            };
+
+            return spacecraft;
         }
     }
 }

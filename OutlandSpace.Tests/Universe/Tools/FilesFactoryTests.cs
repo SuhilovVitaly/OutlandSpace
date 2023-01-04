@@ -10,7 +10,7 @@ namespace OutlandSpace.Tests.Universe.Tools
         {
             var files = OutlandSpace.Universe.Tools.FilesFactory.GetFilesContentFromDirectory("TestsData");
 
-            Assert.AreEqual(6, files.Count);
+            Assert.AreEqual(7, files.Count);
         }
 
         [Test]
