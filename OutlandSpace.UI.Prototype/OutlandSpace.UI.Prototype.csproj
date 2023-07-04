@@ -10,4 +10,8 @@
     <ProjectReference Include="..\OutlandSpace.Universe\OutlandSpace.Universe.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InternalUniverse\Tools\" />
+  </ItemGroup>
+
 </Project>

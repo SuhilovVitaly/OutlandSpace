@@ -44,7 +44,7 @@ namespace OutlandSpace.Server.Engine.Characters
             _ => throw new InvalidEnumArgumentException()
         };
 
-        public static Gender GetRandomGender() => RandomGenerator.GetInteger(1, 3) switch
+        public static Gender GetRandomGender() => new RandomGenerator().GetInteger(1, 3) switch
         {
             1 => Gender.Male,
             2 => Gender.Female,
