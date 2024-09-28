@@ -65,7 +65,7 @@ namespace OutlandSpace.UI.Prototype.InternalUniverse.Engine
                 var direction = randomTool.Direction();
                 var velocity = randomTool.GetDouble(fSettings.AsteroidsSpeed.min, fSettings.AsteroidsSpeed.max);
 
-                stations.Add(new Asteroid{ Name = randomTool.GenerateCelestialObjectName() });
+                //stations.Add(new Asteroid{ Name = randomTool.GenerateCelestialObjectName() });
             }
 
             return stations;

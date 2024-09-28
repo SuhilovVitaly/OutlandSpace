@@ -107,6 +107,7 @@
     <Compile Include="Screens\WindowTacticalMap.Designer.cs">
       <DependentUpon>WindowTacticalMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\Buffering.cs" />
     <Compile Include="Tools\CrossThreadExtensions.cs" />
     <Compile Include="Tools\HighResolutionDateTime.cs" />
     <Compile Include="UiManager.cs" />
